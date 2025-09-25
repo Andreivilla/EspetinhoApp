@@ -1,6 +1,6 @@
 import Search from '@/app/ui/search';
-import Form from '@/app/ui/products/create_form';
-import ProductCard from '@/app/ui/productcard';
+import { CreateProduct } from '@/app/ui/products/buttons';
+import ProductCard from '@/app/ui/products/productcard';
 import { fetchFilteredProducts } from '@/app/lib/data';
 
 export default async function Page({
@@ -18,14 +18,13 @@ export default async function Page({
 
   const products = await fetchFilteredProducts(query, currentPage);
 
-
   return (
     <div>
       <div className='w-full'>
         <h1>Produtos</h1>
         <div className='md:flex md:gap-2'>
           <Search placeholder='Digite o nome do produto.'/>
-          <Form/>
+          <CreateProduct/>
         </div>
       </div>
         <div className="flex flex-wrap gap-4 justify-center pt-4">
