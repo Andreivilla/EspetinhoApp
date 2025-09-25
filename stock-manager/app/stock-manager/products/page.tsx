@@ -25,6 +25,7 @@ export default async function Page({
         <div className='md:flex md:gap-2'>
           <Search placeholder='Digite o nome do produto.'/>
           <CreateProduct/>
+          
         </div>
       </div>
         <div className="flex flex-wrap gap-4 justify-center pt-4">

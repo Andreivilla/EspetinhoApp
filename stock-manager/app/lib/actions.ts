@@ -8,6 +8,7 @@ import { z } from 'zod'
 const prisma = new PrismaClient();
 
 const FormSchema = z.object({
+  id: z.string(),
   name: z.string().min(1, { message: 'Product name is required.' }),
   price: z.coerce.number().gt(0, { message: 'Price must be greater than 0.' }),
   description: z.string().min(1, { message: 'Description is required.' }),
@@ -26,17 +27,20 @@ export type State = {
 
 const CreateProduct = FormSchema.omit({ id: true, date: true });
 
-export async function createProduct(prevState: State, formData: FormData) {
-  console.log('não ta printando')
+export const createProduct = async (
+  state: State,
+  formData: FormData
+): Promise<State> => {
   const image = formData.get('image') as File | null
-  console.log('id: ', formData.get('id'))
-  console.log('image: ', formData.get('image'))
+  
+  /*console.log('id: ', formData.get('id'))
   console.log('FormData:', {
-  name: formData.get('name'),
-  price: formData.get('price'),
-  description: formData.get('description'),
-  image,
-})
+    name: formData.get('name'),
+    price: formData.get('price'),
+    description: formData.get('description'),
+    image,
+    }
+  )*/
 
   const validatedFields = FormSchema.safeParse({
     name: formData.get('name'),
@@ -45,10 +49,10 @@ export async function createProduct(prevState: State, formData: FormData) {
     image,
   })
 
-if (!validatedFields.success) {
-  console.error(validatedFields.error.flatten())
-  throw new Error('Invalid form data')
-}
+  if (!validatedFields.success) {
+    console.error(validatedFields.error.flatten())
+    throw new Error('Invalid form data')
+  }
 
   const { name, price, description } = validatedFields.data
 
