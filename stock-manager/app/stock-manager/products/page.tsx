@@ -14,8 +14,11 @@ export default async function Page({
   }) {
 
   //const params = await searchParams;
-  const query = searchParams?.query || '';
-  const currentPage = Number(searchParams?.page) || 1;
+const params = await searchParams;
+const query = params?.query || '';
+const currentPage = Number(params?.page) || 1;
+
+
   const totalPages = await fetchProductsPages(query);
   
   return (
@@ -34,10 +37,3 @@ export default async function Page({
     </div>
   )
 }
-//        <ProductGrid query={query} currentPage={currentPage}/>
-/*<div className="flex flex-wrap gap-4 justify-center pt-4">
-          {products?.map((product) => (
-            <ProductCard product={product} key={product.id} />
-          ))}
-        </div>*/
-//<ProductCard product={product}/>
