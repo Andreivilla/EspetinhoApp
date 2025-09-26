@@ -25,29 +25,29 @@ export type State = {
   message?: string | null;
 };
 
-const CreateProduct = FormSchema.omit({ id: true, date: true });
+const CreateProduct = FormSchema.omit({ id: true});
+const UpdateProduct = FormSchema.omit({ id: true, date: true });
 
 export const createProduct = async (
   state: State,
   formData: FormData
 ): Promise<State> => {
   const image = formData.get('image') as File | null
-  
-  /*console.log('id: ', formData.get('id'))
-  console.log('FormData:', {
-    name: formData.get('name'),
-    price: formData.get('price'),
-    description: formData.get('description'),
-    image,
-    }
-  )*/
 
-  const validatedFields = FormSchema.safeParse({
+  const validatedFields = CreateProduct.safeParse({
     name: formData.get('name'),
     price: formData.get('price'),
     description: formData.get('description'),
     image,
   })
+
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: 'Campos inválidos ou ausentes. Falha ao criar produto.',
+    };
+  }
+
 
   if (!validatedFields.success) {
     console.error(validatedFields.error.flatten())

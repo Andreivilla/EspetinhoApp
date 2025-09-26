@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { createProduct, State } from '@/app/lib/actions';
 import { useActionState } from 'react';
-
+import Link from 'next/link';
 export default function Form() {
   const [name, setName] = useState('');
   const [price, setPrice] = useState<string>(''); 
@@ -148,16 +148,18 @@ export default function Form() {
         </div>
 
         <div className='w-full flex flex-col gap-2'> 
-          <button
-            type="submit"
-            className="bg-black text-white px-4 py-2 rounded h-14 text-xl"
-          >
-            Salvar
-          </button>
-          <button
-            className="bg-gray-200 text-black px-4 py-2 rounded h-14 text-xl"
+          <Link
+            href={`/stock-manager/products/`}
+            className="flex items-center justify-center bg-gray-200 text-black px-4 py-2 rounded h-14 text-xl"
           >
             Cancelar
+          </Link>
+          <button
+            type="submit"
+            className="bg-black text-white px-4 py-2 
+            rounded h-14 text-xl cursor-pointer"
+          >
+            Salvar
           </button>
         </div>
       </form>

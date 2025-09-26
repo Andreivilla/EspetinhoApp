@@ -1,4 +1,5 @@
 import { Product } from "@prisma/client";
+import { UpdateProduct } from "./buttons";
 
 type ProductCardProps = {
   product: Product;
@@ -38,6 +39,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       
         <div className="flex flex-col gap-2 mt-auto">
           <button className="px-3 py-1 text-sm bg-blue-500 text-white rounded-md hover:bg-blue-600 transition">Editar</button>
+          <UpdateProduct id={product.id}/>
           <button className="px-3 py-1 text-sm bg-red-500 text-white rounded-md hover:bg-red-600 transition">Excluir</button>
         </div>
         

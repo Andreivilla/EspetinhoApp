@@ -8,9 +8,7 @@ export type ProductType = {
 }
 
 const prisma = new PrismaClient();
-
 const ITEMS_PER_PAGE = 6;
-
 export async function fetchFilteredProducts(query: string, currentPage: number) {
   const offset = (currentPage - 1) * ITEMS_PER_PAGE;
 
@@ -34,5 +32,16 @@ export async function fetchFilteredProducts(query: string, currentPage: number) 
   } catch (error) {
     console.error('Prisma Error:', error);
     throw new Error('Failed to fetch products.');
+  }
+}
+export async function fetchProductById(id: string) {
+  try {
+    const data = await prisma.product.findUnique({
+      where: { id },
+    });
+    return data;
+  } catch (error) {
+    console.error('Erro ao buscar o produto', error);
+    return null;
   }
 }

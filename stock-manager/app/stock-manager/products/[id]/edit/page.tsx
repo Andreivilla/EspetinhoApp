@@ -1,20 +1,43 @@
-'use client';
+//import Form from '@/app/ui/invoices/edit-form';
+import Breadcrumbs from '@/app/ui/products/breadcrumbs';
+//import Breadcrumbs from '@/app/ui/invoices/breadcrumbs';
+// import { fetchCustomers } from '@/app/lib/data';
+//import { fetchInvoiceById, fetchCustomers } from '@/app/lib/data';
+import { notFound } from 'next/navigation';
+import { Metadata } from 'next';
+import { fetchProductById } from '@/app/lib/data';
+import Form from '@/app/ui/products/edit-form';
 
-import { useRouter } from 'next/navigation';
+export const metadata: Metadata = {
+  title: 'Invoices | edit',
+};
 
-export default function ProductCard({ product }) {
-  const router = useRouter();
+// export default async function Page() {
+export default async function Page({ params }: { params: { id: string } }) {
+  const id = params.id;
+  
+  const [product] = await Promise.all([
+      fetchProductById(id),
+    ]);
 
+  if (!product) {
+      notFound();
+  }
+        
   return (
-    <div className="border p-4 rounded">
-      <h2>{product.name}</h2>
-      <p>{product.description}</p>
-      <button
-        onClick={() => router.push(`/products/${product.id}/edit`)}
-        className="mt-2 px-4 py-2 bg-blue-600 text-white rounded"
-      >
-        Editar
-      </button>
-    </div>
+    <main>
+      <Breadcrumbs
+        breadcrumbs={[
+          { label: 'Products', href: '/stock-manager/products' },
+          {
+            label: 'Editar Produtos',
+            href: `/stock-manager/products/${id}/edit`,
+            active: true,
+          },
+        ]}
+      />
+      <Form/>
+    </main>
   );
 }
+//<Form invoice={invoice} customers={customers} />

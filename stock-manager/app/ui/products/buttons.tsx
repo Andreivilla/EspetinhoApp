@@ -14,6 +14,17 @@ export function CreateProduct() {
     </Link>
   );
 }
+
+export function UpdateProduct({ id }: { id: string }) {
+  return (
+    <Link
+      href={`/stock-manager/products/${id}/edit`}
+      className="rounded-md border p-2 hover:bg-gray-100"
+    >
+      <PencilIcon className="w-5" />
+    </Link>
+  );
+}
 /*
 export function UpdateInvoice({ id }: { id: string }) {
   return (
