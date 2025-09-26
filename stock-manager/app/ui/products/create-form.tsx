@@ -34,7 +34,11 @@ export default function Form() {
       const selected = e.dataTransfer.files[0];
       setFile(selected);
       setPreview(URL.createObjectURL(selected));
-      e.dataTransfer.clearData();
+      try{
+        e.dataTransfer.clearData();
+      }catch(err){
+        console.warn('Erro ao limpar o dataTransfer:', err)
+      }
     }
   };
 
@@ -166,61 +170,3 @@ export default function Form() {
     </div>
   );
 }
-/*
-                  <div className="mb-6 mt-4">
-  {preview ? (
-    <div className="relative w-full h-48 border rounded overflow-hidden flex items-center justify-center bg-gray-100">
-      <img
-        src={preview}
-        alt="Imagem selecionada"
-        className="object-cover w-full h-full"
-      />
-      <button
-        type="button"
-        onClick={removeImage}
-        className="absolute top-2 right-2 bg-white text-red-600 rounded-full w-6 h-6 flex items-center justify-center text-sm shadow"
-      >
-        ✕
-      </button>
-    </div>
-  ) : (
-    <label
-  htmlFor="image-upload"
-  className={`flex flex-col items-center justify-center w-full h-48 border-2 border-dashed rounded-md cursor-pointer transition
-    ${isDragging ? 'border-blue-600 bg-blue-50' : 'border-gray-300 bg-gray-50 hover:bg-gray-100'}`}
-  onDragOver={(e) => {
-    e.preventDefault();
-    setIsDragging(true);
-  }}
-  onDragLeave={(e) => {
-    e.preventDefault();
-    setIsDragging(false);
-  }}
-  onDrop={(e) => {
-    e.preventDefault();
-    setIsDragging(false);
-    const file = e.dataTransfer.files?.[0];
-    if (file) handleImageChange(file);
-  }}
->
-  <div className="flex flex-col items-center justify-center">
-    <div className="w-10 h-10 bg-black text-white rounded-full flex items-center justify-center mb-2">
-      ⬆
-    </div>
-    <p className="text-sm text-gray-600 text-center">
-      Arraste e solte o arquivo aqui<br />
-      ou <span className="underline text-blue-600">Escolher arquivo</span>
-    </p>
-  </div>
-<input
-  id="image-upload"
-  name="image"
-  type="file"
-  accept="image/*"
-  className="hidden"
-  onChange={(e) => handleImageChange(e.target.files?.[0])}
-/>
-    </label>
-  )}
-</div>
- */

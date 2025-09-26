@@ -18,15 +18,18 @@ const FormSchema = z.object({
 
 export type State = {
   errors?: {
-    customerId?: string[];
-    amount?: string[];
-    status?: string[];
+    name?: string[];
+    price?: string[];
+    description?: string[];
+    image?: string[];
   };
   message?: string | null;
 };
 
+ 
 const CreateProduct = FormSchema.omit({ id: true});
-const UpdateProduct = FormSchema.omit({ id: true, date: true });
+const UpdateProduct = FormSchema.omit({ id: true});
+
 
 export const createProduct = async (
   state: State,
@@ -46,12 +49,6 @@ export const createProduct = async (
       errors: validatedFields.error.flatten().fieldErrors,
       message: 'Campos inválidos ou ausentes. Falha ao criar produto.',
     };
-  }
-
-
-  if (!validatedFields.success) {
-    console.error(validatedFields.error.flatten())
-    throw new Error('Invalid form data')
   }
 
   const { name, price, description } = validatedFields.data

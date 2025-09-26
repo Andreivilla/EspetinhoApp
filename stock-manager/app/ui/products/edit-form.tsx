@@ -1,22 +1,39 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { createProduct, State } from '@/app/lib/actions';
 import { useActionState } from 'react';
 import Link from 'next/link';
+import { Product } from '@/app/lib/definitions';
 
-export default function Form() {
+export default function Form({ product }: { product: Product }) {
   const [name, setName] = useState('');
-  const [price, setPrice] = useState<string>(''); 
+  const [price, setPrice] = useState<string>('');
   const [description, setDescription] = useState('');
 
   const initialState: State = { message: null, errors: {} };
-  
   const [state, formAction] = useActionState(createProduct, initialState);
-//
 
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
+
+  // 👇 Converte imagem do banco (Uint8Array) em URL para preview
+  useEffect(() => {
+    if (product.image && !preview) {
+      const blob = new Blob([product.image], { type: 'image/jpeg' }); // ajuste o tipo se necessário
+      const url = URL.createObjectURL(blob);
+      setPreview(url);
+    }
+  }, [product.image, preview]);
+
+  // 👇 Libera memória da URL temporária
+  useEffect(() => {
+    return () => {
+      if (preview) {
+        URL.revokeObjectURL(preview);
+      }
+    };
+  }, [preview]);
 
   const handleDragOver = (e: React.DragEvent<HTMLLabelElement>) => {
     e.preventDefault();
@@ -30,8 +47,7 @@ export default function Form() {
   const handleDrop = (e: React.DragEvent<HTMLLabelElement>) => {
     e.preventDefault();
     setIsDragging(false);
-
-    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+    if (e.dataTransfer.files?.[0]) {
       const selected = e.dataTransfer.files[0];
       setFile(selected);
       setPreview(URL.createObjectURL(selected));
@@ -40,7 +56,7 @@ export default function Form() {
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
+    if (e.target.files?.[0]) {
       const selected = e.target.files[0];
       setFile(selected);
       setPreview(URL.createObjectURL(selected));
@@ -52,45 +68,38 @@ export default function Form() {
     setPreview(null);
   };
 
-//
   return (
-    <div className=''>
-      <h2 className="text-xl font-bold mb-4">Adicionar Produto</h2>
+    <div>
+      <h2 className="text-xl font-bold mb-4">Editar Produto</h2>
 
       <form action={formAction}>
-        <div className='flex flex-col gap-4'>
+        <div className="flex flex-col gap-4">
           <input
             type="text"
             name="name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder="Nome"
-            className="outline-none border-3 focus:border-black 
-              peer block w-full rounded-md border-gray-200 
-              py-2 pl-2 text-sm outline-2 placeholder:text-gray-500"
+            placeholder={product.name}
+            className="outline-none border-3 focus:border-black peer block w-full rounded-md border-gray-200 py-2 pl-2 text-sm placeholder:text-gray-500"
           />
           <input
             type="text"
             name="price"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
-            placeholder="Preco"
-            className="outline-none border-3 focus:border-black 
-              peer block w-full rounded-md border-gray-200 
-              py-2 pl-2 text-sm outline-2 placeholder:text-gray-500"
+            placeholder={product.price}
+            className="outline-none border-3 focus:border-black peer block w-full rounded-md border-gray-200 py-2 pl-2 text-sm placeholder:text-gray-500"
           />
           <textarea
             name="description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            placeholder="Descrição"
-            className="outline-none border-3 focus:border-black 
-              peer block w-full h-40 rounded-md border-gray-200 
-              p-2 text-sm placeholder:text-gray-500 resize-none"
+            placeholder={product.description}
+            className="outline-none border-3 focus:border-black peer block w-full h-40 rounded-md border-gray-200 p-2 text-sm placeholder:text-gray-500 resize-none"
           ></textarea>
         </div>
 
-        {/* imagem */}
+        {/* Imagem */}
         <div className="flex flex-col items-center my-4">
           <label
             htmlFor="fileInput"
@@ -121,11 +130,7 @@ export default function Form() {
                 </span>
               </>
             ) : (
-              <img
-                src={preview}
-                alt="Preview"
-                className="object-cover w-full h-full"
-              />
+              <img src={preview} alt="Preview" className="object-cover w-full h-full" />
             )}
           </label>
 
@@ -137,10 +142,11 @@ export default function Form() {
             className="hidden"
             onChange={handleChange}
           />
-          
+
           {file && (
             <button
               onClick={removeFile}
+              type="button"
               className="mt-2 px-3 py-1 bg-red-500 text-white text-sm rounded hover:bg-red-600"
             >
               Remover imagem
@@ -148,23 +154,18 @@ export default function Form() {
           )}
         </div>
 
-        <div className='w-full flex flex-col gap-2'> 
-          <button
-            type="submit"
-            className="bg-black text-white px-4 py-2 rounded h-14 text-xl"
-          >
-            Salvar
-          </button>
+        <div className="w-full flex flex-col gap-2">
           <Link
             href={`/stock-manager/products/`}
-            className="bg-gray-200 text-black px-4 py-2 rounded h-14 text-xl"
-          >
-            Cancelar com <link rel="stylesheet" href="" />
-          </Link>
-          <button
-            className="bg-gray-200 text-black px-4 py-2 rounded h-14 text-xl"
+            className="flex items-center justify-center bg-gray-200 text-black px-4 py-2 rounded h-14 text-xl"
           >
             Cancelar
+          </Link>
+          <button
+            type="submit"
+            className="bg-black text-white px-4 py-2 rounded h-14 text-xl cursor-pointer"
+          >
+            Salvar
           </button>
         </div>
       </form>
