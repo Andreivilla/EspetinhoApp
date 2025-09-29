@@ -21,31 +21,19 @@ export async function fetchProductsPages(query: string) {
       },
     ];
 
-    // Se for número, adiciona filtro por preço
-    /*
-    if (!isNaN(Number(query))) {
-      filters.push({
-        price: {
-          equals: Number(query),
-        },
-      });
-    }*/
-
-    const products = await prisma.product.findMany({
+    const totalCount = await prisma.product.count({
       where: {
         OR: filters,
       },
     });
 
-    const totalCount = products.length;
-    const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
+    const totalPages = Math.max(1, Math.ceil(totalCount / ITEMS_PER_PAGE));
     return totalPages;
   } catch (error) {
     console.error('Prisma Error:', error);
     throw new Error('Failed to fetch total number of products.');
   }
 }
-
 
 // do invoices pra aprender
 /*

@@ -20,9 +20,11 @@ export function UpdateProduct({ id }: { id: string }) {
   return (
     <Link
       href={`/stock-manager/products/${id}/edit`}
-      className="rounded-md border p-2 hover:bg-gray-100"
+      className="rounded-md border p-2 bg-black 
+      text-white flex align-center justify-center
+      hover:bg-gray-800"
     >
-      <PencilIcon className="w-5" />
+      <span>Editar Produto</span>
     </Link>
   );
 }
@@ -32,9 +34,13 @@ export function DeleteProduct({ id }: { id: string }) {
  
   return (
     <form action={deleteProductWithId}>
-      <button type="submit" className="rounded-md border p-2 hover:bg-gray-100">
-        <span className="sr-only">Delete</span>
-        <TrashIcon className="w-4" />
+      <button type="submit" 
+        className="rounded-md border p-2 h-10 bg-red-700
+        text-white flex align-center justify-center
+        hover:bg-gray-800 w-full"
+      >
+          <span>Deletar Produto</span>
+        
       </button>
     </form>
   );

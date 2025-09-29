@@ -3,17 +3,15 @@ import { CreateProduct } from '@/app/ui/products/buttons';
 import { fetchProductsPages } from '@/app/lib/data';
 import ProductGrid from '@/app/ui/products/grid';
 import Pagination from '@/app/ui/products/pagination';
-
+import { Suspense } from 'react';
 export default async function Page({
-    searchParams,
+  searchParams,
   }: {
     searchParams?: {
       query?: string;
       page?: string;
     };
   }) {
-
-  //const params = await searchParams;
   const params = await searchParams;
   const query = params?.query || '';
   const currentPage = Number(params?.page) || 1;
@@ -33,10 +31,13 @@ export default async function Page({
             </div>
         </div>
       </div>
-      <ProductGrid query={query} currentPage={currentPage}/>
-      <div className="mt-5 flex w-full justify-center">
+        <ProductGrid query={query} currentPage={currentPage} />
+          <div className="mt-5 flex w-fu ll justify-center">
         <Pagination totalPages={totalPages}/>
       </div>
     </div>
   )
 }
+/*<Suspense key={query + currentPage} fallback={<div>Carregando...</div>}>
+        <ProductGrid query={query} currentPage={currentPage} />
+      </Suspense> */
