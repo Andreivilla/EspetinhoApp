@@ -1,17 +1,22 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { createProduct, State } from '@/app/lib/actions';
+import { updateProduct, State } from '@/app/lib/actions';
 import { useActionState } from 'react';
 import Link from 'next/link';
 import { Product } from '@/app/lib/definitions';
 
-export default function Form({ product }: { product: Product }) {
-  const [name, setName] = useState('');
-  const [price, setPrice] = useState<string>('');
-  const [description, setDescription] = useState('');
+export default function Form({ 
+  product 
+}: { 
+  product: Product 
+}) {
+  const [name, setName] = useState(product.name);
+  const [price, setPrice] = useState(product.price);
+  const [description, setDescription] = useState(product.description);
 
   const initialState: State = { message: null, errors: {} };
-  const [state, formAction] = useActionState(createProduct, initialState);
+  const updateProductWithId = updateProduct.bind(null, product.id);
+  const [state, formAction] = useActionState(updateProductWithId, initialState);
 
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
@@ -20,7 +25,7 @@ export default function Form({ product }: { product: Product }) {
   // 👇 Converte imagem do banco (Uint8Array) em URL para preview
   useEffect(() => {
     if (product.image && !preview) {
-      const blob = new Blob([product.image], { type: 'image/jpeg' }); // ajuste o tipo se necessário
+      const blob = new Blob([new Uint8Array(product.image)], { type: 'image/jpeg' });
       const url = URL.createObjectURL(blob);
       setPreview(url);
     }
@@ -79,22 +84,19 @@ export default function Form({ product }: { product: Product }) {
             name="name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder={product.name}
-            className="outline-none border-3 focus:border-black peer block w-full rounded-md border-gray-200 py-2 pl-2 text-sm placeholder:text-gray-500"
+            className="outline-none border-3 focus:border-black peer block w-full rounded-md border-gray-200 py-2 pl-2 text-sm"
           />
           <input
             type="text"
             name="price"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
-            placeholder={product.price}
             className="outline-none border-3 focus:border-black peer block w-full rounded-md border-gray-200 py-2 pl-2 text-sm placeholder:text-gray-500"
           />
           <textarea
             name="description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            placeholder={product.description}
             className="outline-none border-3 focus:border-black peer block w-full h-40 rounded-md border-gray-200 p-2 text-sm placeholder:text-gray-500 resize-none"
           ></textarea>
         </div>

@@ -14,10 +14,9 @@ export default async function Page({
   }) {
 
   //const params = await searchParams;
-const params = await searchParams;
-const query = params?.query || '';
-const currentPage = Number(params?.page) || 1;
-
+  const params = await searchParams;
+  const query = params?.query || '';
+  const currentPage = Number(params?.page) || 1;
 
   const totalPages = await fetchProductsPages(query);
   
@@ -25,9 +24,13 @@ const currentPage = Number(params?.page) || 1;
     <div>
       <div className='w-full'>
         <h1>Produtos</h1>
-        <div className='md:flex md:gap-2'>
-          <Search placeholder='Digite o nome do produto.'/>
-          <CreateProduct />
+        <div className='md:h-10 h-22 flex flex-col md:flex-row gap-2'>
+            <div className='flex-1 md:flex-3'>
+              <Search placeholder='Digite o nome do produto.' />
+            </div>
+            <div className='flex-1 md:flex-1'>
+              <CreateProduct />
+            </div>
         </div>
       </div>
       <ProductGrid query={query} currentPage={currentPage}/>

@@ -2,7 +2,6 @@
 import { PrismaClient } from "@prisma/client";
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-import { ProductType } from '@/app/lib/data'; 
 import { z } from 'zod'
 
 const prisma = new PrismaClient();
@@ -26,10 +25,63 @@ export type State = {
   message?: string | null;
 };
 
- 
 const CreateProduct = FormSchema.omit({ id: true});
 const UpdateProduct = FormSchema.omit({ id: true});
 
+export async function deleteProduct(id: string) {
+  prisma.product.delete({
+    where: {id},
+  });
+}
+
+export async function updateProduct(
+  id: string,
+  prevState: State,
+  formData: FormData,
+) {
+  const validatedFields = UpdateProduct.safeParse({
+    name: formData.get('name'),
+    price: formData.get('price'),
+    description: formData.get('description'),
+    stock: formData.get('stock'),
+    image: formData.get('image'), // isso aqui ta errado vamo deixar comentado pra ver noq dá
+  });
+  console.log('formData: ', formData)
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: 'Missing Fields. Failed to Update Product.',
+    };
+  }
+
+
+  let imageBuffer: Buffer | null = null;
+  const imageFile = formData.get('image') as File;
+  if (imageFile && imageFile.size > 0) {
+    const arrayBuffer = await imageFile.arrayBuffer();
+    imageBuffer = Buffer.from(arrayBuffer);
+  }
+
+  const { name, price, description, image } = validatedFields.data;
+  try {
+    await prisma.product.update({
+      where: { id },
+      data: {
+        name,
+        price,
+        description,
+  //      image: image instanceof File ? await image.arrayBuffer() : undefined,
+        ...(imageBuffer && { image: imageBuffer }),
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    return { message: 'Database Error: Failed to Update Product.' };
+  }
+
+  revalidatePath('/stock-manager/products');
+  redirect('/stock-manager/products');
+}
 
 export const createProduct = async (
   state: State,
