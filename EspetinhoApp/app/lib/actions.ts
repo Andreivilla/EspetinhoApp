@@ -11,8 +11,7 @@ const FormSchema = z.object({
   name: z.string().min(1, { message: 'Product name is required.' }),
   price: z.coerce.number().gt(0, { message: 'Price must be greater than 0.' }),
   description: z.string().min(1, { message: 'Description is required.' }),
-  image: z.any().optional()
- // se estiver vindo de um <input type="file">
+  image: z.instanceof(File).optional()
 })
 
 export type State = {
@@ -66,7 +65,7 @@ export async function updateProduct(
     imageBuffer = Buffer.from(arrayBuffer);
   }
 
-  const { name, price, description, image } = validatedFields.data;
+  const { name, price, description} = validatedFields.data;
   try {
     await prisma.product.update({
       where: { id },

@@ -3,13 +3,11 @@ import { CreateProduct } from '@/app/ui/products/buttons';
 import { fetchProductsPages } from '@/app/lib/data';
 import ProductGrid from '@/app/ui/products/grid';
 import Pagination from '@/app/ui/products/pagination';
-import { promise } from 'zod';
-//import { useSearchParams } from 'next/navigation';
 
 export default async function Page({
   searchParams,
   }: {
-    searchParams: Promise<{query: String}>
+    searchParams: Promise<{query: string, page: number}>
   }){
     const params = await searchParams;
 
@@ -38,6 +36,3 @@ export default async function Page({
     </div>
   )
 }
-/*<Suspense key={query + currentPage} fallback={<div>Carregando...</div>}>
-        <ProductGrid query={query} currentPage={currentPage} />
-      </Suspense> */

@@ -1,6 +1,8 @@
 import { fetchFilteredProducts } from "@/app/lib/data";
-import { DeleteProduct, UpdateProduct } from "./buttons";
+import { UpdateProduct } from "./buttons";
 import DeleteModal from "./modal/deleteModal";
+import Image from "next/image";
+import { Product } from "@/app/lib/definitions";
 
 function detectMimeFromBytes(bytes: Uint8Array | number[]) {
   if (!bytes || bytes.length < 4) return "image/jpeg";
@@ -19,50 +21,22 @@ export default async function ProductGrid({
 }) {
   const products = await fetchFilteredProducts(query, currentPage);
 
-  function getImageSrc(image: any): string | null {
+  function getImageSrc(image?: Uint8Array | null): string | null {
     if (!image) return null;
-
-    // 1) string cases: data URI / URL / raw base64
-    if (typeof image === "string") {
-      if (image.startsWith("data:")) return image; // já é data URI
-      if (/^https?:\/\//.test(image) || image.startsWith("/")) return image; // URL pública/local
-      // assume raw base64
-      return `data:image/jpeg;base64,${image}`;
-    }
-
-    // 2) Node Buffer
-    if (typeof Buffer !== "undefined" && Buffer.isBuffer(image)) {
-      const bytes = new Uint8Array(image);
-      const mime = detectMimeFromBytes(bytes);
-      return `data:${mime};base64,${image.toString("base64")}`;
-    }
-
-    // 3) Prisma serialized Buffer: { type: 'Buffer', data: [...] } OR { data: [...] }
-    if (image.data && Array.isArray(image.data)) {
-      const arr = Uint8Array.from(image.data);
-      const mime = detectMimeFromBytes(arr);
-      const b64 = typeof Buffer !== "undefined" ? Buffer.from(arr).toString("base64") : btoa(String.fromCharCode(...arr));
-      return `data:${mime};base64,${b64}`;
-    }
-
-    // 4) plain array de números
-    if (Array.isArray(image) && image.length && typeof image[0] === "number") {
-      const arr = Uint8Array.from(image);
-      const mime = detectMimeFromBytes(arr);
-      const b64 = typeof Buffer !== "undefined" ? Buffer.from(arr).toString("base64") : btoa(String.fromCharCode(...arr));
-      return `data:${mime};base64,${b64}`;
-    }
-
-    // 5) Uint8Array
+  
     if (image instanceof Uint8Array) {
       const arr = image;
       const mime = detectMimeFromBytes(arr);
-      const b64 = typeof Buffer !== "undefined" ? Buffer.from(arr).toString("base64") : btoa(String.fromCharCode(...arr));
+      const b64 =
+        typeof Buffer !== "undefined"
+          ? Buffer.from(arr).toString("base64")
+          : btoa(String.fromCharCode(...arr));
       return `data:${mime};base64,${b64}`;
     }
-
+  
     return null;
   }
+  
 
   return (
     <div className="flex flex-wrap gap-4 justify-center pt-4">
