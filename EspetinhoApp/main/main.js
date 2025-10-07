@@ -1,6 +1,18 @@
-const { app, BrowserWindow } = require("electron");
-const serve = require("electron-serve").default;
-const path = require("path");
+import { app, BrowserWindow } from 'electron';
+import serve from 'electron-serve';
+import path from 'path';
+
+import next from 'next';
+import { createServer } from 'http';
+
+import { fileURLToPath } from 'url';
+
+import { initializeDatabase } from '../app/lib/db.ts'
+
+initializeDatabase();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const appServe = app.isPackaged ? serve({
   directory: path.join(__dirname, "../out")
@@ -17,8 +29,7 @@ const createWindow = () => {
 
   if (app.isPackaged) {
     // Servir o Next em modo produção
-    const next = require('next');
-    const { createServer } = require('http');
+
     const nextApp = next({ dev: false, dir: path.join(__dirname, '..') });
     const handle = nextApp.getRequestHandler();
   

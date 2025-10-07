@@ -4,7 +4,7 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { z } from 'zod'
 
-const prisma = new PrismaClient();
+//const prisma = new PrismaClient();
 
 const FormSchema = z.object({
   id: z.string(),
@@ -18,7 +18,6 @@ export type State = {
   errors?: {
     name?: string[];
     price?: string[];
-    description?: string[];
     image?: string[];
   };
   message?: string | null;
@@ -28,11 +27,11 @@ const CreateProduct = FormSchema.omit({ id: true});
 const UpdateProduct = FormSchema.omit({ id: true});
 
 export async function deleteProduct(id: string) {
-  await prisma.product.delete({
+  /*await prisma.product.delete({
     where: {
       id: id,
     },
-  });
+  });*/
   revalidatePath('/stock-manager/products');
   redirect('/stock-manager/products');
 }
@@ -67,7 +66,7 @@ export async function updateProduct(
 
   const { name, price, description} = validatedFields.data;
   try {
-    await prisma.product.update({
+    /*await prisma.product.update({
       where: { id },
       data: {
         name,
@@ -76,7 +75,7 @@ export async function updateProduct(
   //      image: image instanceof File ? await image.arrayBuffer() : undefined,
         ...(imageBuffer && { image: imageBuffer }),
       },
-    });
+    });*/
   } catch (error) {
     console.error(error);
     return { message: 'Database Error: Failed to Update Product.' };
@@ -114,14 +113,14 @@ export const createProduct = async (
     bufferImage = Buffer.from(arrayBuffer)
   }
 
-  await prisma.product.create({
+  /*await prisma.product.create({
     data: {
       name,
       price,
       description,
       image: bufferImage,
     },
-  })
+  })*/
 
   revalidatePath('/stock-manager/products')
   redirect('/stock-manager/products')

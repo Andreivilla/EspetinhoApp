@@ -1,4 +1,4 @@
-import { Product } from "@prisma/client";
+import { Product } from "@/app/lib/definitions";
 import { UpdateProduct, DeleteProduct } from "./buttons";
 import Image from "next/image";
 
@@ -33,7 +33,6 @@ export default function ProductCard({ product }: ProductCardProps) {
         <div className="flex justify-between">
           <div>
             <h2 className="text-xl font-semibold text-gray-800">{product.name}</h2>
-            <p className="text-sm text-gray-600 mt-1">{product.description}</p>
           </div>
           <span className="text-lg font-bold text-green-600">{product.price}</span>
         </div>

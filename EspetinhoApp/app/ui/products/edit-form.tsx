@@ -13,7 +13,7 @@ export default function Form({
 }) {
   const [name, setName] = useState(product.name);
   const [price, setPrice] = useState(product.price);
-  const [description, setDescription] = useState(product.description);
+  
 
   const initialState: State = { message: null, errors: {} };
   const updateProductWithId = updateProduct.bind(null, product.id);
@@ -92,12 +92,6 @@ export default function Form({
             onChange={(e) => setPrice(Number(e.target.value))}
             className="outline-none border-3 focus:border-black peer block w-full rounded-md border-gray-200 py-2 pl-2 text-sm placeholder:text-gray-500"
           />
-          <textarea
-            name="description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            className="outline-none border-3 focus:border-black peer block w-full h-40 rounded-md border-gray-200 p-2 text-sm placeholder:text-gray-500 resize-none"
-          ></textarea>
         </div>
 
         {/* Imagem */}

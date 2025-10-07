@@ -1,10 +1,34 @@
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import db from './db'; 
+import { Product } from './definitions';
+//const prisma = new PrismaClient();// apagar
 
 const ITEMS_PER_PAGE = 6;
 
-export async function fetchProductsPages(query: string) {
+//products
+export function fetchProductsPages(query: string): number {
+  try {
+    const loweredQuery = query.toLowerCase();
+
+    const stmt = db.prepare(`
+      SELECT COUNT(*) as total
+      FROM PRODUTO
+      WHERE LOWER(nome) LIKE ?
+    `);
+
+    const likeQuery = `%${loweredQuery}%`;
+    const result = stmt.get(likeQuery) as { total?: number };
+
+    const total = typeof result?.total === 'number' ? result.total : 0;
+    const totalPages = Math.max(1, Math.ceil(total / ITEMS_PER_PAGE));
+
+    return totalPages;
+  } catch (error) {
+    console.error('SQLite Error:', error);
+    throw new Error('Failed to fetch total number of products.');
+  }
+}
+
+/*export async function fetchProductsPages(query: string) {
   try {
     const loweredQuery = query.toLowerCase();
 
@@ -21,19 +45,19 @@ export async function fetchProductsPages(query: string) {
       },
     ];
 
-    const totalCount = await prisma.product.count({
+    /*const totalCount = await prisma.product.count({
       where: {
         OR: filters,
       },
     });
 
-    const totalPages = Math.max(1, Math.ceil(totalCount / ITEMS_PER_PAGE));
-    return totalPages;
+    //const totalPages = Math.max(1, Math.ceil(totalCount / ITEMS_PER_PAGE));
+    //return totalPages;
   } catch (error) {
     console.error('Prisma Error:', error);
     throw new Error('Failed to fetch total number of products.');
   }
-}
+}*/
 
 // do invoices pra aprender
 /*
@@ -62,7 +86,7 @@ export async function fetchFilteredProducts(query: string, currentPage: number) 
   const offset = (currentPage - 1) * ITEMS_PER_PAGE;
 
   try {
-    const products = await prisma.product.findMany({
+    /*const products = await prisma.product.findMany({
       where: {
         OR: [
           { name: { contains: query } },
@@ -77,7 +101,9 @@ export async function fetchFilteredProducts(query: string, currentPage: number) 
       take: ITEMS_PER_PAGE,
     });
 
-    return products;
+    return products;*/
+      const emptyList: Product[] = [];
+  return emptyList;
   } catch (error) {
     console.error('Prisma Error:', error);
     throw new Error('Failed to fetch products.');
@@ -86,10 +112,10 @@ export async function fetchFilteredProducts(query: string, currentPage: number) 
 
 export async function fetchProductById(id: string) {
   try {
-    const data = await prisma.product.findUnique({
+    /*const data = await prisma.product.findUnique({
       where: { id },
     });
-    return data;
+    return data;*/
   } catch (error) {
     console.error('Erro ao buscar o produto', error);
     return null;

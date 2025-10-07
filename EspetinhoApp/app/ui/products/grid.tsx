@@ -1,8 +1,9 @@
 import { fetchFilteredProducts } from "@/app/lib/data";
 import { UpdateProduct } from "./buttons";
 import DeleteModal from "./modal/deleteModal";
-import Image from "next/image";
 import { Product } from "@/app/lib/definitions";
+import Image from "next/image";
+
 
 function detectMimeFromBytes(bytes: Uint8Array | number[]) {
   if (!bytes || bytes.length < 4) return "image/jpeg";
@@ -62,7 +63,6 @@ export default async function ProductGrid({
               <div className="flex justify-between">
                 <div>
                   <h2 className="text-xl font-semibold text-gray-800">{product.name}</h2>
-                  <p className="text-sm text-gray-600 mt-1">{product.description}</p>
                 </div>
                 <span className="text-lg font-bold text-green-600">{product.price}</span>
               </div>

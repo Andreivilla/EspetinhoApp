@@ -1,8 +1,7 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var nextConfig = {
-    images: {
-        unoptimized: true
-    }
+const nextConfig = {
+  images: {
+    unoptimized: true
+  }
 };
-exports.default = nextConfig;
+
+export default nextConfig;
