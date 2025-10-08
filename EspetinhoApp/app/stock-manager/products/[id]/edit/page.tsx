@@ -1,5 +1,5 @@
 //import Form from '@/app/ui/products/create-form';
-import Breadcrumbs from '@/app/ui/products/breadcrumbs';
+import Breadcrumbs from '@/app/ui/breadcrumbs';
 import Form from '@/app/ui/products/edit-form';
 import { Produto } from '@/app/lib/definitions';
 import { fetchProductById } from '@/app/lib/product/data';

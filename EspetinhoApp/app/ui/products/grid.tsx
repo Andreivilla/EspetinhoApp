@@ -71,6 +71,7 @@ const conteudoHTML = `
               </div>
 
               <div className="flex flex-col gap-2 mt-auto">
+                <DeleteModal id={String(product.id)} /> 
                 <UpdateProduct id={String(product.id)} />
               </div>
             </div>
@@ -83,5 +84,5 @@ const conteudoHTML = `
 //<DeleteProduct id={product.id} />
 /*                
 <UpdateProduct id={product.id} />
-<DeleteModal id={product.id} /> 
+
 */

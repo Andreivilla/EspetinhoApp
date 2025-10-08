@@ -72,11 +72,14 @@ export const createProduct = async (
 
 
 export async function deleteProduct(id: string) {
-  /*await prisma.product.delete({
-    where: {
-      id: id,
-    },
-  });*/
+  const sql = 'DELETE FROM PRODUTOS WHERE id = ?';
+  const result = await runMutation(sql, [id]);
+
+  if (!result.success) {
+    console.error('Erro ao deletar produto:', result.error);
+    return;
+  }
+
   revalidatePath('/stock-manager/products');
   redirect('/stock-manager/products');
 }
