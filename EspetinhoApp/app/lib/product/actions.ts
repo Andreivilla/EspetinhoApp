@@ -1,8 +1,7 @@
 'use server'
-import db from '../db';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-import { promise, z } from 'zod'
+import { z } from 'zod'
 import { runMutation } from '../db';
 
 //const prisma = new PrismaClient();

@@ -1,9 +1,6 @@
 import { fetchFilteredProducts } from "@/app/lib/product/data";
 import { UpdateProduct } from "./buttons";
 import DeleteModal from "./modal/deleteModal";
-import Image from "next/image";
-
-
 
 function detectMimeFromBytes(bytes: Uint8Array | number[]) {
   if (!bytes || bytes.length < 4) return "image/jpeg";
@@ -38,10 +35,6 @@ export default async function ProductGrid({
     return null;
   }
   
-const conteudoHTML = `
-    <h2 class="text-xl font-bold mb-2">Detalhes do Produto</h2>
-    <p class="text-gray-700">Este produto é feito com materiais premium e tem garantia de 2 anos.</p>
-  `;
   return (
     <div className="flex flex-wrap gap-4 justify-center pt-4">
       {products?.map((product) => {

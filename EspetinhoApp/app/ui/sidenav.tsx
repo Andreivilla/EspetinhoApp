@@ -2,7 +2,6 @@ import Link from 'next/link';
 import NavLinks from '@/app/ui/nav-links';
 import { PowerIcon } from '@heroicons/react/24/outline';
 import Image from 'next/image';
-// import { signOut } from '@/auth'; // desativado por enquanto
 
 export default function SideNav() {
   return (

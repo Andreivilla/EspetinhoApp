@@ -8,10 +8,10 @@
   "type": "module",
   "scripts": {
     "dev": "concurrently -n \"NEXT,ELECTRON\" -c \"yellow,blue\" --kill-others \"next dev\" \"electron .\"",
-    "build": "next build && electron-builder",
     "start": "next start",
     "lint": "eslint",
-    "package":"npx electron-packager . EspetinhoApp --platform=win32 --arch=x64 --out=dist --overwrite"
+    "rebuild": "electron-rebuild",
+    "build:win": "next build && npm run rebuild && electron-builder --win --x64"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
@@ -44,22 +44,5 @@
     "eslint-config-next": "15.5.4",
     "tailwindcss": "^4",
     "typescript": "^5"
-  },
-  "build": {
-    "appId": "com.espetinho.app",
-    "directories": {
-      "output": "dist"
-    },
-    "files": [
-      "dist/**/*",
-      "node_modules/**/*",
-      "!node_modules/@img/sharp-*arm64*",
-      "!node_modules/@img/sharp-darwin-*",
-      "!node_modules/@img/sharp-linux-*"
-    ],
-    "win": {
-      "target": "nsis",
-      "icon": "icon.ico"
-    }
   }
 }

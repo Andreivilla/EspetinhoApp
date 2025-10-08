@@ -60,7 +60,7 @@ export default db;
 
 export async function getQuery<T = unknown>(
   sql: string,
-  params: any[] = []
+  params: unknown[] = []
 ): Promise<T | null> {
   try {
     const result = await new Promise<T>((resolve, reject) => {
@@ -82,7 +82,7 @@ export async function getQuery<T = unknown>(
 
 export async function getAll<T = unknown>(
   sql: string,
-  params: any[] = []
+  params: unknown[] = []
 ): Promise<{ success: boolean; data?: T[]; error?: string }> {
   try {
     const result = await new Promise<T[]>((resolve, reject) => {
@@ -100,7 +100,7 @@ export async function getAll<T = unknown>(
 
 export async function runMutation(
   sql: string,
-  params: any[] = []
+  params: unknown[] = []
 ): Promise<{ success: boolean; changes?: number; error?: string }> {
   try {
     const result = await new Promise<{ changes: number }>((resolve, reject) => {

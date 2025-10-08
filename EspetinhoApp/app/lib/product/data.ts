@@ -1,4 +1,3 @@
-import db from '../db'; 
 import { Produto } from '../definitions';
 import { getQuery } from '../db';
 import { getAll } from '../db';
@@ -35,10 +34,6 @@ export async function fetchFilteredProducts(query: string, currentPage: number):
   return data;
 
 }
-
-
-
-
 
 export async function fetchProductById(id: string): Promise<Produto | null> {
   try {
