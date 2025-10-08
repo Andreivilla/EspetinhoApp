@@ -1,7 +1,6 @@
-export type Product = {
-  id: string;
-  name: string;
-  price: number;
-  image?: Uint8Array | null; 
+export type Produto = {
+  id: number;
+  nome: string;
+  valor: number;
+  imagem?: Uint8Array | null;
 };
-

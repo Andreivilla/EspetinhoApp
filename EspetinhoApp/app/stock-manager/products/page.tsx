@@ -1,6 +1,6 @@
 import Search from '@/app/ui/search';
 import { CreateProduct } from '@/app/ui/products/buttons';
-import { fetchProductsPages } from '@/app/lib/data';
+import { fetchProductsPages } from '@/app/lib/product/data';
 import ProductGrid from '@/app/ui/products/grid';
 import Pagination from '@/app/ui/products/pagination';
 

@@ -1,19 +1,15 @@
 'use client';
 import { useState } from 'react';
-import { createProduct, State } from '@/app/lib/actions';
+import { createProduct, State } from '@/app/lib/product/actions';
 import { useActionState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 
 export default function Form() {
   const [name, setName] = useState('');
   const [price, setPrice] = useState<string>(''); 
-  const [description, setDescription] = useState('');
-
   const initialState: State = { message: null, errors: {} };
   
   const [, formAction] = useActionState(createProduct, initialState);
-//
 
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
@@ -84,15 +80,6 @@ export default function Form() {
               peer block w-full rounded-md border-gray-200 
               py-2 pl-2 text-sm outline-2 placeholder:text-gray-500"
           />
-          <textarea
-            name="description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            placeholder="Descrição"
-            className="outline-none border-3 focus:border-black 
-              peer block w-full h-40 rounded-md border-gray-200 
-              p-2 text-sm placeholder:text-gray-500 resize-none"
-          ></textarea>
         </div>
 
         {/* imagem */}
@@ -126,7 +113,7 @@ export default function Form() {
                 </span>
               </>
             ) : (
-              <Image
+              <img
                 src={preview}
                 alt="Preview"
                 className="object-cover w-full h-full"

@@ -23,31 +23,31 @@ export function initializeDatabase() {
     console.log('Criando banco de dados e tabelas...');
 
     db.exec(`
-      CREATE TABLE MESA (
-        id INTEGER PRIMARY KEY AUTOINCREMENT
+      CREATE TABLE MESAS (
+          id INTEGER PRIMARY KEY AUTOINCREMENT
       );
 
-      CREATE TABLE PRODUTO (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        image BLOB,
-        valor DECIMAL(20,2),
-        nome TEXT
+      CREATE TABLE PRODUTOS (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          imagem BLOB,
+          valor DECIMAL(20,2),
+          nome TEXT
       );
 
-      CREATE TABLE PEDIDO (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        data DATETIME,
-        situacao TEXT CHECK(situacao IN ('ABERTO', 'PAGO', 'CANCELADO'))
+      CREATE TABLE PEDIDOS (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          data DATETIME,
+          situacao TEXT CHECK(situacao IN ('ABERTO', 'PAGO', 'CANCELADO'))
       );
 
       CREATE TABLE PEDIDOITEM (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        id_produto INTEGER,
-        id_pedido INTEGER,
-        quantidade INTEGER,
-        preco DECIMAL(20,2),
-        FOREIGN KEY (id_produto) REFERENCES PRODUTO(id),
-        FOREIGN KEY (id_pedido) REFERENCES PEDIDO(id)
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          id_produto INTEGER,
+          id_pedido INTEGER,
+          quantidade INTEGER,
+          valor DECIMAL(20,2),
+          FOREIGN KEY (id_produto) REFERENCES PRODUTO(id),
+          FOREIGN KEY (id_pedido) REFERENCES PEDIDO(id)
       );
     `);
 
@@ -56,3 +56,65 @@ export function initializeDatabase() {
 }
 
 export default db;
+
+
+export async function getQuery<T = unknown>(
+  sql: string,
+  params: any[] = []
+): Promise<T | null> {
+  try {
+    const result = await new Promise<T>((resolve, reject) => {
+      db.get(sql, params, (err, row) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(row as T);
+        }
+      });
+    });
+
+    return result;
+  } catch (error) {
+    console.error('Erro ao executar query:', (error as Error).message);
+    return null;
+  }
+}
+
+export async function getAll<T = unknown>(
+  sql: string,
+  params: any[] = []
+): Promise<{ success: boolean; data?: T[]; error?: string }> {
+  try {
+    const result = await new Promise<T[]>((resolve, reject) => {
+      db.all(sql, params, (err, rows) => {
+        if (err) reject(err);
+        else resolve(rows as T[]);
+      });
+    });
+
+    return { success: true, data: result };
+  } catch (error) {
+    return { success: false, error: (error as Error).message };
+  }
+}
+
+export async function runMutation(
+  sql: string,
+  params: any[] = []
+): Promise<{ success: boolean; changes?: number; error?: string }> {
+  try {
+    const result = await new Promise<{ changes: number }>((resolve, reject) => {
+      db.run(sql, params, function (err) {
+        if (err) {
+          reject(err);
+        } else {
+          resolve({ changes: this.changes }); // this.changes = número de linhas afetadas
+        }
+      });
+    });
+
+    return { success: true, changes: result.changes };
+  } catch (error) {
+    return { success: false, error: (error as Error).message };
+  }
+}

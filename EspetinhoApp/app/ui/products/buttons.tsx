@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { deleteProduct } from '@/app/lib/actions';
+import { deleteProduct } from '@/app/lib/product/actions';
 
 
 export function CreateProduct() {

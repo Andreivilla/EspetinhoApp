@@ -1,19 +1,20 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { updateProduct, State } from '@/app/lib/actions';
+import { updateProduct, State } from '@/app/lib/product/actions';
 import { useActionState } from 'react';
 import Link from 'next/link';
-import { Product } from '@/app/lib/definitions';
-import Image from 'next/image';
+import { Produto } from '@/app/lib/definitions';
+
+// Novo tipo que aceita imagem como base64 (string) também:
+type ProdutoComImagemBase64 = Omit<Produto, 'imagem'> & { imagem?: Uint8Array | string | null };
 
 export default function Form({ 
   product 
 }: { 
-  product: Product 
+  product: ProdutoComImagemBase64
 }) {
-  const [name, setName] = useState(product.name);
-  const [price, setPrice] = useState(product.price);
-  
+  const [name, setName] = useState(product.nome);
+  const [price, setPrice] = useState(product.valor);
 
   const initialState: State = { message: null, errors: {} };
   const updateProductWithId = updateProduct.bind(null, product.id);
@@ -23,13 +24,20 @@ export default function Form({
   const [preview, setPreview] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
 
+  // ✅ Suporte tanto para imagem Uint8Array quanto base64 string
   useEffect(() => {
-    if (product.image && !preview) {
-      const blob = new Blob([new Uint8Array(product.image)], { type: 'image/jpeg' });
-      const url = URL.createObjectURL(blob);
-      setPreview(url);
+    if (product.imagem && !preview) {
+      if (typeof product.imagem === 'string') {
+        // imagem já está em base64
+        setPreview(`data:image/jpeg;base64,${product.imagem}`);
+      } else {
+        // imagem é Uint8Array → criar URL blob
+        const blob = new Blob([new Uint8Array(product.imagem)], { type: 'image/jpeg' });
+        const url = URL.createObjectURL(blob);
+        setPreview(url);
+      }
     }
-  }, [product.image, preview]);
+  }, [product.imagem, preview]);
 
   useEffect(() => {
     return () => {
@@ -44,9 +52,7 @@ export default function Form({
     setIsDragging(true);
   };
 
-  const handleDragLeave = () => {
-    setIsDragging(false);
-  };
+  const handleDragLeave = () => setIsDragging(false);
 
   const handleDrop = (e: React.DragEvent<HTMLLabelElement>) => {
     e.preventDefault();
@@ -125,7 +131,7 @@ export default function Form({
                 </span>
               </>
             ) : (
-              <Image src={preview} alt="Preview" className="object-cover w-full h-full" />
+              <img src={preview} alt="Preview" className="object-cover w-full h-full" />
             )}
           </label>
 

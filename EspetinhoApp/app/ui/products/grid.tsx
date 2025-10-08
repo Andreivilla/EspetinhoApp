@@ -1,8 +1,8 @@
-import { fetchFilteredProducts } from "@/app/lib/data";
+import { fetchFilteredProducts } from "@/app/lib/product/data";
 import { UpdateProduct } from "./buttons";
 import DeleteModal from "./modal/deleteModal";
-import { Product } from "@/app/lib/definitions";
 import Image from "next/image";
+
 
 
 function detectMimeFromBytes(bytes: Uint8Array | number[]) {
@@ -38,11 +38,14 @@ export default async function ProductGrid({
     return null;
   }
   
-
+const conteudoHTML = `
+    <h2 class="text-xl font-bold mb-2">Detalhes do Produto</h2>
+    <p class="text-gray-700">Este produto é feito com materiais premium e tem garantia de 2 anos.</p>
+  `;
   return (
     <div className="flex flex-wrap gap-4 justify-center pt-4">
       {products?.map((product) => {
-        const imgSrc = getImageSrc(product.image);
+        const imgSrc = getImageSrc(product.imagem);
 
         return (
           <div
@@ -51,7 +54,7 @@ export default async function ProductGrid({
           >
             <div className="h-1/2">
               {imgSrc ? (
-                <img className="object-cover w-full h-full" src={imgSrc} alt={product.name ?? "produto"} />
+                <img className="object-cover w-full h-full" src={imgSrc} alt={product.nome ?? "produto"} />
               ) : (
                 <div className="flex items-center justify-center w-full h-full bg-gray-200 text-gray-500">
                   Sem imagem
@@ -62,14 +65,13 @@ export default async function ProductGrid({
             <div className="p-4 h-1/2 flex flex-col justify-between">
               <div className="flex justify-between">
                 <div>
-                  <h2 className="text-xl font-semibold text-gray-800">{product.name}</h2>
+                  <h2 className="text-xl font-semibold text-gray-800">{product.nome}</h2>
                 </div>
-                <span className="text-lg font-bold text-green-600">{product.price}</span>
+                <span className="text-lg font-bold text-green-600">{product.valor}</span>
               </div>
 
               <div className="flex flex-col gap-2 mt-auto">
-                <UpdateProduct id={product.id} />
-                <DeleteModal id={product.id} />
+                <UpdateProduct id={String(product.id)} />
               </div>
             </div>
           </div>
@@ -79,3 +81,7 @@ export default async function ProductGrid({
   );
 }
 //<DeleteProduct id={product.id} />
+/*                
+<UpdateProduct id={product.id} />
+<DeleteModal id={product.id} /> 
+*/

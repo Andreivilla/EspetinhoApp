@@ -26,6 +26,31 @@ const createWindow = () => {
       preload: path.join(__dirname, "preload.js")
     }
   });
+    // 🔐 Intercepta navegações internas para evitar 404
+  win.webContents.on('will-navigate', (event, url) => {
+    event.preventDefault();
+    win.loadURL(url);
+  });
+
+  // 🔐 Bloqueia abertura de novas janelas externas
+  win.webContents.setWindowOpenHandler(() => {
+    return { action: 'deny' };
+  });
+
+  if (app.isPackaged) {
+    const nextApp = next({ dev: false, dir: path.join(__dirname, '..') });
+    const handle = nextApp.getRequestHandler();
+
+    nextApp.prepare().then(() => {
+      const server = createServer((req, res) => handle(req, res));
+      server.listen(3000, () => {
+        win.loadURL('http://localhost:3000/stock-manager');
+      });
+    });
+  } else {
+    win.loadURL('http://localhost:3000/stock-manager');
+    win.webContents.openDevTools();
+  }
 
   if (app.isPackaged) {
     // Servir o Next em modo produção
