@@ -1,6 +1,6 @@
 import { fetchFilteredProducts } from "@/app/lib/product/data";
 import { UpdateProduct } from "./buttons";
-import DeleteModal from "./modal/deleteModal";
+import DeleteModal from "./deleteModal";
 
 function detectMimeFromBytes(bytes: Uint8Array | number[]) {
   if (!bytes || bytes.length < 4) return "image/jpeg";

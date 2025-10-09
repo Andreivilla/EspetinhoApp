@@ -44,11 +44,11 @@ const createWindow = () => {
     nextApp.prepare().then(() => {
       const server = createServer((req, res) => handle(req, res));
       server.listen(3000, () => {
-        win.loadURL('http://localhost:3000/stock-manager');
+        win.loadURL('http://localhost:3000');
       });
     });
   } else {
-    win.loadURL('http://localhost:3000/stock-manager');
+    win.loadURL('http://localhost:3000');
     win.webContents.openDevTools();
   }
 
@@ -61,11 +61,11 @@ const createWindow = () => {
     nextApp.prepare().then(() => {
       const server = createServer((req, res) => handle(req, res));
       server.listen(3000, () => {
-        win.loadURL('http://localhost:3000/stock-manager');
+        win.loadURL('http://localhost:3000');
       });
     });
   } else {
-    win.loadURL('http://localhost:3000/stock-manager');
+    win.loadURL('http://localhost:3000');
     win.webContents.openDevTools();
   }
 }

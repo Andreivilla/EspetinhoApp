@@ -1,6 +1,6 @@
 'use client'
 import { useState } from "react";
-import { DeleteProduct } from "../buttons";
+import { DeleteProduct } from "./buttons";
 
 export default function DeleteModal({ id }: { id: string }) {
   const [isOpen, setIsOpen] = useState(false);

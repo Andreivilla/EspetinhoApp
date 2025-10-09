@@ -7,20 +7,35 @@ import {
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
+import { IconPicnicTable, IconNote } from '@tabler/icons-react';
 // Map of links to display in the side navigation.
 // Depending on the size of the application, this would be stored in a database.
 const links = [
-    {
+  {
     name: 'Produtos',
     href: '/stock-manager/products',
     icon: CubeIcon,
   },
-  { name: 'Home', href: '/stock-manager', icon: HomeIcon },
+  { 
+    name: 'Home', 
+    href: '/stock-manager', 
+    icon: HomeIcon 
+  },
   { 
     name: 'Ultimos Produtos', 
     href: '/LastProducts', 
     icon: ExclamationCircleIcon,
   },
+  {
+    name: 'Mesas',
+    href:'/stock-manager/tables',
+    icon: IconPicnicTable,
+  },
+  {
+    name: 'Pedidos',
+    href: 'stock-manager/Pedi',
+    icon: IconNote,
+  }
 ];
 
 export default function NavLinks() {

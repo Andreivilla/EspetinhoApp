@@ -5,7 +5,6 @@ import { getAll } from '../db';
 
 const ITEMS_PER_PAGE = 6;
 
-//products
 export async function fetchProductsPages(query: string): Promise<number> {
   const sql = `SELECT COUNT(*) AS total FROM PRODUTOS WHERE LOWER(nome) LIKE ?`;
   const params = [`%${query.toLowerCase()}%`];
@@ -30,9 +29,7 @@ export async function fetchFilteredProducts(query: string, currentPage: number):
     console.error('Erro ao buscar produtos:', error);
     return [];
   }
-
   return data;
-
 }
 
 export async function fetchProductById(id: string): Promise<Produto | null> {

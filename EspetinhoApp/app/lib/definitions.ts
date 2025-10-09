@@ -4,3 +4,6 @@ export type Produto = {
   valor: number;
   imagem?: Uint8Array | null;
 };
+export type Mesa = {
+  id: number;
+}

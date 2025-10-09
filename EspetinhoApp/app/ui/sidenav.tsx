@@ -27,7 +27,7 @@ export default function SideNav() {
                         md:block">
         </div>
 
-        {/* Botão de logout desativado temporariamente */}
+        {/* Botão de logout desativado temporariamente IPAQUI*
         <button
           className="flex h-[48px] w-full grow items-center justify-center gap-2 
                     rounded-md bg-gray-50 p-3 text-sm font-medium 
@@ -37,7 +37,7 @@ export default function SideNav() {
         >
           <PowerIcon className="w-6" />
           <div className="hidden md:block">Sign Out</div>
-        </button>
+        </button>/*/}
       </div>
     </div>
   );
