@@ -1,6 +1,5 @@
 import { fetchFilteredProducts } from "@/app/lib/product/data";
-import { UpdateProduct } from "./buttons";
-import DeleteModal from "./deleteModal";
+import OrderList from "./orderList";
 
 function detectMimeFromBytes(bytes: Uint8Array | number[]) {
   if (!bytes || bytes.length < 4) return "image/jpeg";
@@ -10,7 +9,7 @@ function detectMimeFromBytes(bytes: Uint8Array | number[]) {
   return "image/jpeg";
 }
 
-export default async function ProductGrid({
+export default async function OrderSearch({
   query,
   currentPage,
 }: {
@@ -36,6 +35,8 @@ export default async function ProductGrid({
   }
   
   return (
+  <>
+    {/* 
     <div className="flex flex-wrap gap-4 justify-center pt-4">
       {products?.map((product) => {
         const imgSrc = getImageSrc(product.imagem);
@@ -62,15 +63,17 @@ export default async function ProductGrid({
                 </div>
                 <span className="text-lg font-bold text-green-600">{product.valor}</span>
               </div>
-
+              
               <div className="flex flex-col gap-2 mt-auto">
-                <DeleteModal id={String(product.id)} /> 
-                <UpdateProduct id={String(product.id)} />
               </div>
             </div>
           </div>
         );
       })}
     </div>
-  );
+    */}
+
+  </>
+    );
 }
+

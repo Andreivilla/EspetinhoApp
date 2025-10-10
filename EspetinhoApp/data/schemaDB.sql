@@ -20,7 +20,7 @@ CREATE TABLE PEDIDOITEM (
     id_produto INTEGER,
     id_pedido INTEGER,
     quantidade INTEGER,
-    valor DECIMAL(20,2),
+    valor DECIMAL(20,2),--tem que tirar esse valor
     FOREIGN KEY (id_produto) REFERENCES PRODUTO(id),
     FOREIGN KEY (id_pedido) REFERENCES PEDIDO(id)
 );
