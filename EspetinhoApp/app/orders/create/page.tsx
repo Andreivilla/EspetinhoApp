@@ -1,38 +1,48 @@
 import Search from '@/app/ui/search';
-import { CreateProduct } from '@/app/ui/products/buttons';
-import { fetchProductsPages } from '@/app/lib/product/data';
-import ProductGrid from '@/app/ui/products/grid';
+import { fetchProductsPages, fetchFilteredProducts } from '@/app/lib/product/data';
 import Pagination from '@/app/ui/products/pagination';
 import OrderList from '@/app/ui/orders/orderList';
+import LogButton from '@/app/ui/orders/LogButton';
 
-export default async function Page({
-  searchParams,
-  }: {
-    searchParams: Promise<{query: string, page: number}>
-  }){
-    const params = await searchParams;
+function serializeProducts(products: any[]) {
+  return products.map((p) => {
+    if (p.imagem && p.imagem instanceof Uint8Array) {
+      const b64 = Buffer.from(p.imagem).toString('base64');
+      return {
+        ...p,
+        imagem: `data:image/jpeg;base64,${b64}`, 
+      };
+    }
+    return { ...p, imagem: null };
+  });
+}
 
+export default async function Page({ searchParams }: {
+  searchParams: Promise<{ query: string, page: number }>
+}) {
+  const params = await searchParams;
   const query = params?.query || '';
   const currentPage = Number(params?.page) || 1;
-    
+
   const totalPages = await fetchProductsPages(query);
-  
+  const productsRaw = await fetchFilteredProducts(query, currentPage);
+  const products = serializeProducts(productsRaw);
+
   return (
     <div>
       <div className='w-full'>
         <div className='md:h-10 h-12 flex flex-col md:flex-row gap-2'>
-            <div className='flex-1 md:flex-3'>
-              <Search placeholder='Digite o nome do produto.' />
-            </div>
-            {/*<div className='flex-1 md:flex-1'>
-              <CreateProduct />
-            </div>*/}
+          <div className='flex-1 md:flex-3'>
+            <Search placeholder='Digite o nome do produto.' />
+          </div>
         </div>
+        <LogButton products={products} />
       </div>
-        <OrderList query={query} currentPage={currentPage}/>
-          <div className="mt-5 flex w-fu ll justify-center">
-        <Pagination totalPages={totalPages}/>
+      <OrderList products={products} />
+
+      <div className="mt-5 flex w-full justify-center">
+        <Pagination totalPages={totalPages} />
       </div>
     </div>
-  )
+  );
 }
