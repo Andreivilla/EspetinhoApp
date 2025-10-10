@@ -30,12 +30,12 @@ export default function OrderList({ products }: { products: any[] }) {
 
           <select
             className="border rounded px-3 py-2"
-            value={quantities[product.id] || 1}
+            value={quantities[product.id] || 0}
             onChange={(e) => handleQuantityChange(product.id, Number(e.target.value))}
           >
             {[...Array(30)].map((_, i) => (
-              <option key={i + 1} value={i + 1}>
-                {i + 1}
+              <option key={i} value={i}>
+                {i}
               </option>
             ))}
           </select>

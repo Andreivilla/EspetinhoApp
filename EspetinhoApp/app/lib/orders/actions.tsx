@@ -1,0 +1,54 @@
+'use server'
+import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
+import { z } from 'zod'
+import { runMutation } from '../db';
+
+//const prisma = new PrismaClient();
+//product crud
+const FormSchema = z.object({
+  id: z.string(),
+  name: z.string().min(1, { message: 'Product name is required.' }),
+  price: z.coerce.number().gt(0, { message: 'Price must be greater than 0.' }),
+  image: z.instanceof(File).optional()
+})
+
+export type State = {
+  errors?: {
+    name?: string[];
+    price?: string[];
+    image?: string[];
+  };
+  message?: string | null;
+};
+
+export async function CreateOrder() {
+  const sql = `INSERT INTO MESAS (id) SELECT 
+    COALESCE(MAX(id), 0) + 1 FROM MESAS;`;
+  
+  const result = await runMutation(sql);
+
+  if (!result.success) {
+    console.error('Erro ao adicionar mesa:', result.error);
+    return;
+  }
+
+  revalidatePath('/stock-manager/tables');
+  redirect('/stock-manager/tables');
+}
+
+export async function deleteTable() {
+  const sql = `DELETE FROM MESAS
+    WHERE id = (SELECT MAX(id) FROM MESAS);`;
+  
+  const result = await runMutation(sql);
+
+  if (!result.success) {
+    console.error('Erro ao deletar mesa:', result.error);
+    return;
+  }
+
+  revalidatePath('/stock-manager/tables');
+  redirect('/stock-manager/tables');
+}
+
