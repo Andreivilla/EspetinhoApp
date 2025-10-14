@@ -1,6 +1,6 @@
 import sqlite3 from 'sqlite3';
-import path from 'path';
-import fs from 'fs';
+import path from 'node:path';
+import fs from 'node:fs';
 
 const dbPath = path.resolve(process.cwd(), process.env.DATABASE_PATH || './data/db.db');
 

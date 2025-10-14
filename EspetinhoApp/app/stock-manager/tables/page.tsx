@@ -2,13 +2,9 @@ import { fetchNTables } from "@/app/lib/tables/data";
 import { CreateTable, DeleteTable } from "@/app/ui/tables/buttons";
 export default async function Page({
   searchParams,
-  }: {
-    searchParams: Promise<{query: string, page: number}>
-  }){
-    const params = await searchParams;
-
-  const query = params?.query || '';
-
+}: Readonly<{
+  searchParams: Promise<{query: string, page: number}>
+}>){
   const nMesas = fetchNTables();
 
   return (

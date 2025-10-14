@@ -1,8 +1,10 @@
-import SideNav from '@/app/ui/sidenav';
-import Link from 'next/link';
 import Image from 'next/image';
 export const experimental_ppr = true;
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default function Layout({ 
+  children 
+}: Readonly<{
+  children: React.ReactNode 
+}>) {
   return (
     <div className="flex h-screen flex-col md:flex-row md:overflow-hidden p-2 ">
       <div className="w-full flex-none md:w-64">

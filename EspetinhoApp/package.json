@@ -12,6 +12,7 @@
     "lint": "eslint",
     "rebuild": "electron-rebuild",
     "build:win": "next build && npm run rebuild && electron-builder --win --x64"
+
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",

@@ -15,7 +15,11 @@ export function CreateProduct() {
   );
 }
 
-export function UpdateProduct({ id }: { id: string }) {
+export function UpdateProduct({ 
+  id 
+}:Readonly <{ 
+  id: string
+}>){
   return (
     <Link
       href={`/stock-manager/products/${id}/edit`}
@@ -28,7 +32,11 @@ export function UpdateProduct({ id }: { id: string }) {
   );
 }
 
-export function DeleteProduct({ id }: { id: string }) {
+export function DeleteProduct({ 
+  id 
+}:Readonly <{ 
+  id: string
+}>){
   const deleteProductWithId = deleteProduct.bind(null, id);
  
   return (

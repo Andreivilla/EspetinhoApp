@@ -1,7 +1,6 @@
 'use client';
-import { useState } from 'react';
+import { useState, useActionState } from 'react';
 import { createProduct, State } from '@/app/lib/product/actions';
-import { useActionState } from 'react';
 import Link from 'next/link';
 
 export default function Form() {
@@ -53,7 +52,6 @@ export default function Form() {
     setPreview(null);
   };
 
-//
   return (
     <div className=''>
       <h2 className="text-xl font-bold mb-4">Adicionar Produto</h2>
@@ -93,7 +91,7 @@ export default function Form() {
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
           >
-            {!preview ? (
+            {preview == null ? (
               <>
                 <svg
                   className="w-10 h-10 text-gray-400 mb-2"

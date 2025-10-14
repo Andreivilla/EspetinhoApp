@@ -6,9 +6,9 @@ import Pagination from '@/app/ui/products/pagination';
 
 export default async function Page({
   searchParams,
-  }: {
-    searchParams: Promise<{query: string, page: number}>
-  }){
+}: Readonly< {
+  searchParams: Promise<{query: string, page: number}>
+}>){
     const params = await searchParams;
 
   const query = params?.query || '';

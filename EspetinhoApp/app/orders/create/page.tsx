@@ -17,9 +17,14 @@ function serializeProducts(products: any[]) {
   });
 }
 
-export default async function Page({ searchParams }: {
-  searchParams: Promise<{ query: string, page: number }>
-}) {
+export default async function Page({ 
+  searchParams 
+}: Readonly<{
+  searchParams: Promise<{ 
+    query: string, 
+    page: number 
+  }>
+}>) {
   const params = await searchParams;
   const query = params?.query || '';
   const currentPage = Number(params?.page) || 1;

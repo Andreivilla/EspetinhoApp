@@ -10,30 +10,30 @@ function detectMimeFromBytes(bytes: Uint8Array | number[]) {
   return "image/jpeg";
 }
 
+function getImageSrc(image?: Uint8Array | null): string | null {
+  if (!image) return null;
+
+  if (image instanceof Uint8Array) {
+    const arr = image;
+    const mime = detectMimeFromBytes(arr);
+    const b64 =
+      typeof Buffer == "undefined"
+        ? btoa(String.fromCodePoint(...arr))
+        : Buffer.from(arr).toString("base64");
+    return `data:${mime};base64,${b64}`;
+  }
+
+  return null;
+}
+
 export default async function ProductGrid({
   query,
   currentPage,
-}: {
+}: Readonly<{
   query: string;
   currentPage: number;
-}) {
+}>) {
   const products = await fetchFilteredProducts(query, currentPage);
-
-  function getImageSrc(image?: Uint8Array | null): string | null {
-    if (!image) return null;
-  
-    if (image instanceof Uint8Array) {
-      const arr = image;
-      const mime = detectMimeFromBytes(arr);
-      const b64 =
-        typeof Buffer !== "undefined"
-          ? Buffer.from(arr).toString("base64")
-          : btoa(String.fromCharCode(...arr));
-      return `data:${mime};base64,${b64}`;
-    }
-  
-    return null;
-  }
   
   return (
     <div className="flex flex-wrap gap-4 justify-center pt-4">

@@ -1,9 +1,7 @@
 import { Metadata } from 'next'; 
-//import '@/app/ui/global.css';
+
 import '@/app/global.css';
 import { inter } from '@/app/ui/fonts';
-
-import {} from '@/app/ui/fonts'
 
 export const metadata: Metadata = {
   title: {
@@ -16,13 +14,12 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   return (
     <html lang="en">
       <body className={`${inter.className} antialiased`}>{children}</body>
     </html>
   );
 }
-//<body className={`${inter.className} antialiased`}>{children}</body>

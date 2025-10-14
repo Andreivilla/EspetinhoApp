@@ -6,18 +6,18 @@ import { Button } from './button';
 export default function LogButton({
   products,
   nTables,
-}: {
-  products: any[];
+}: Readonly<{
+  products: ReadonlyArray<any>;
   nTables: number;
-}) {
+}>){
   const [selectedTable, setSelectedTable] = useState<number | null>(null);
 
   const handleLog = () => {
     console.log('📦 Produtos e quantidades:');
-    products.forEach((p) => {
+    for (const p of products){
       console.log(`ID: ${p.id}, Quantidade: ${p.quantidade ?? '(sem quantidade)'}`);
-    });
-    console.log('🪑 Mesa selecionada:', selectedTable ?? 'nenhuma');
+    }
+    console.log('Mesa selecionada:', selectedTable ?? 'nenhuma');
   };
 
   return (
@@ -33,7 +33,7 @@ export default function LogButton({
           onChange={(e) => setSelectedTable(Number(e.target.value))}
         >
           <option value="">Selecione</option>
-          {[...Array(nTables)].map((_, i) => (
+          {[new Array(nTables)].map((_, i) => (
             <option key={i + 1} value={i + 1}>
               Mesa {i + 1}
             </option>

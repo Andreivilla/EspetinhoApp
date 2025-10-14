@@ -38,9 +38,8 @@ export const createProduct = async (
   });
 
   if (!validatedFields.success) {
-    console.log("Erros de validação:", validatedFields.error.flatten().fieldErrors);
+    console.log("Erros de validação:", validatedFields.error.issues);
     return {
-      errors: validatedFields.error.flatten().fieldErrors,
       message: "Campos inválidos ou ausentes. Falha ao criar produto.",
     };
   }
@@ -98,9 +97,8 @@ export async function updateProduct(
   });
 
   if (!validatedFields.success) {
-    console.log("Erros de validação:", validatedFields.error.flatten().fieldErrors);
+    console.log("Erros de validação:", validatedFields.error.issues);
     return {
-      errors: validatedFields.error.flatten().fieldErrors,
       message: "Campos inválidos ou ausentes. Falha ao atualizar produto.",
     };
   }

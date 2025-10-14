@@ -2,7 +2,11 @@
 
 import { useState } from 'react';
 
-export default function OrderList({ products }: { products: any[] }) {
+export default function OrderList({ 
+  products 
+}: Readonly<{ 
+  products: any[] 
+}>) {
   const [quantities, setQuantities] = useState<Record<number, number>>({});
 
   function handleQuantityChange(productId: number, value: number) {
@@ -33,9 +37,9 @@ export default function OrderList({ products }: { products: any[] }) {
             value={quantities[product.id] || 0}
             onChange={(e) => handleQuantityChange(product.id, Number(e.target.value))}
           >
-            {[...Array(30)].map((_, i) => (
-              <option key={i} value={i}>
-                {i}
+            {Array.from({ length: 30 }, (_, i) => (
+              <option key={String.fromCodePoint(97 + i)} value={i}>
+                {String.fromCodePoint(97 + i)}
               </option>
             ))}
           </select>

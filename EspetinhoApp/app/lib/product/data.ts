@@ -1,6 +1,5 @@
 import { Produto } from '../definitions';
-import { getQuery } from '../db';
-import { getAll } from '../db';
+import { getQuery, getAll } from '../db';
 //const prisma = new PrismaClient();// apagar
 
 const ITEMS_PER_PAGE = 6;

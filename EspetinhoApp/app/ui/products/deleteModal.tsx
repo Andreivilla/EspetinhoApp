@@ -2,7 +2,11 @@
 import { useState } from "react";
 import { DeleteProduct } from "./buttons";
 
-export default function DeleteModal({ id }: { id: string }) {
+export default function DeleteModal({ 
+  id 
+}: Readonly <{ 
+  id: string 
+}>) {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <>

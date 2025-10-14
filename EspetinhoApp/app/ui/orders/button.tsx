@@ -12,7 +12,9 @@ export function Button({
   className,
   variant = 'default',
   ...props
-}: ButtonProps) {
+}: Readonly < 
+  ButtonProps>
+){
   const base =
     'inline-flex items-center justify-center rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none';
   const variants = {

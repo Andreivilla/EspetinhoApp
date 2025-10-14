@@ -6,7 +6,13 @@ type TextInputProps = {
   placeholder?: string;
 };
 
-export function TextInput({ value, onChange, placeholder }: TextInputProps) {
+export function TextInput({ 
+  value, 
+  onChange, 
+  placeholder 
+}: Readonly<
+ TextInputProps
+>){
   return (
     <input
       type="text"
@@ -24,7 +30,13 @@ type NumberInputProps = {
   placeholder?: string;
 };
 
-export function NumberInput({ value, onChange, placeholder }: NumberInputProps) {
+export function NumberInput({ 
+  value, 
+  onChange, 
+  placeholder 
+}: Readonly< 
+  NumberInputProps
+>){
   return (
     <input
       type="text"

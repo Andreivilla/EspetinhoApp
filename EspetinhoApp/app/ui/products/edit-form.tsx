@@ -1,7 +1,6 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useActionState } from 'react';
 import { updateProduct, State } from '@/app/lib/product/actions';
-import { useActionState } from 'react';
 import Link from 'next/link';
 import { Produto } from '@/app/lib/definitions';
 
@@ -10,9 +9,9 @@ type ProdutoComImagemBase64 = Omit<Produto, 'imagem'> & { imagem?: Uint8Array | 
 
 export default function Form({ 
   product 
-}: { 
+}: Readonly <{ 
   product: ProdutoComImagemBase64
-}) {
+}>) {
   const [name, setName] = useState(product.nome);
   const [price, setPrice] = useState(product.valor);
 
@@ -24,14 +23,13 @@ export default function Form({
   const [preview, setPreview] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
 
-  // ✅ Suporte tanto para imagem Uint8Array quanto base64 string
   useEffect(() => {
     if (product.imagem && !preview) {
       if (typeof product.imagem === 'string') {
         // imagem já está em base64
         setPreview(`data:image/jpeg;base64,${product.imagem}`);
       } else {
-        // imagem é Uint8Array → criar URL blob
+        // imagem é Uint8Array criar URL blob
         const blob = new Blob([new Uint8Array(product.imagem)], { type: 'image/jpeg' });
         const url = URL.createObjectURL(blob);
         setPreview(url);
@@ -111,7 +109,7 @@ export default function Form({
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
           >
-            {!preview ? (
+            {preview == null ? (
               <>
                 <svg
                   className="w-10 h-10 text-gray-400 mb-2"

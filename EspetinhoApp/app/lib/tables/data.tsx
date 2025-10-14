@@ -1,5 +1,4 @@
 import { getQuery } from '../db';
-import { getAll } from '../db';
 
 export async function fetchNTables() {
   const sql = `SELECT COUNT(*) AS total FROM MESAS`;

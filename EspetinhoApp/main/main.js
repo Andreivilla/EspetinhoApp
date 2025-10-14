@@ -1,11 +1,11 @@
 import { app, BrowserWindow } from 'electron';
 import serve from 'electron-serve';
-import path from 'path';
+import path from 'node:path';
 
 import next from 'next';
-import { createServer } from 'http';
+import { createServer } from 'node:http';
 
-import { fileURLToPath } from 'url';
+import { fileURLToPath } from 'node:url';
 
 import { initializeDatabase } from '../app/lib/db.ts'
 

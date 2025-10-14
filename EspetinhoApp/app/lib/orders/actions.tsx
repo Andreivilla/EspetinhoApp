@@ -22,7 +22,7 @@ export type State = {
   message?: string | null;
 };
 
-export async function CreateOrder() {
+export async function createOrder() {
   const sql = `INSERT INTO MESAS (id) SELECT 
     COALESCE(MAX(id), 0) + 1 FROM MESAS;`;
   
