@@ -1,44 +1,18 @@
 'use client';
-import { useState, useEffect } from 'react';
-import { updateProduct, State } from '@/app/lib/actions';
-import { useActionState } from 'react';
+import { useState, useActionState } from 'react';
+import { createProduct, State } from '@/app/lib/product/actions';
 import Link from 'next/link';
-import { Product } from '@/app/lib/definitions';
 
-export default function Form({ 
-  product 
-}: { 
-  product: Product 
-}) {
-  const [name, setName] = useState(product.name);
-  const [price, setPrice] = useState(product.price);
-  const [description, setDescription] = useState(product.description);
-
+export default function Form() {
+  const [name, setName] = useState('');
+  const [price, setPrice] = useState<string>(''); 
   const initialState: State = { message: null, errors: {} };
-  const updateProductWithId = updateProduct.bind(null, product.id);
-  const [state, formAction] = useActionState(updateProductWithId, initialState);
+  
+  const [, formAction] = useActionState(createProduct, initialState);
 
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
-
-  // 👇 Converte imagem do banco (Uint8Array) em URL para preview
-  useEffect(() => {
-    if (product.image && !preview) {
-      const blob = new Blob([new Uint8Array(product.image)], { type: 'image/jpeg' });
-      const url = URL.createObjectURL(blob);
-      setPreview(url);
-    }
-  }, [product.image, preview]);
-
-  // 👇 Libera memória da URL temporária
-  useEffect(() => {
-    return () => {
-      if (preview) {
-        URL.revokeObjectURL(preview);
-      }
-    };
-  }, [preview]);
 
   const handleDragOver = (e: React.DragEvent<HTMLLabelElement>) => {
     e.preventDefault();
@@ -52,16 +26,21 @@ export default function Form({
   const handleDrop = (e: React.DragEvent<HTMLLabelElement>) => {
     e.preventDefault();
     setIsDragging(false);
-    if (e.dataTransfer.files?.[0]) {
+
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
       const selected = e.dataTransfer.files[0];
       setFile(selected);
       setPreview(URL.createObjectURL(selected));
-      e.dataTransfer.clearData();
+      try{
+        e.dataTransfer.clearData();
+      }catch(err){
+        console.warn('Erro ao limpar o dataTransfer:', err)
+      }
     }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files?.[0]) {
+    if (e.target.files && e.target.files.length > 0) {
       const selected = e.target.files[0];
       setFile(selected);
       setPreview(URL.createObjectURL(selected));
@@ -74,34 +53,34 @@ export default function Form({
   };
 
   return (
-    <div>
-      <h2 className="text-xl font-bold mb-4">Editar Produto</h2>
+    <div className=''>
+      <h2 className="text-xl font-bold mb-4">Adicionar Produto</h2>
 
       <form action={formAction}>
-        <div className="flex flex-col gap-4">
+        <div className='flex flex-col gap-4'>
           <input
             type="text"
             name="name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="outline-none border-3 focus:border-black peer block w-full rounded-md border-gray-200 py-2 pl-2 text-sm"
+            placeholder="Nome"
+            className="outline-none border-3 focus:border-black 
+              peer block w-full rounded-md border-gray-200 
+              py-2 pl-2 text-sm outline-2 placeholder:text-gray-500"
           />
           <input
             type="text"
             name="price"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
-            className="outline-none border-3 focus:border-black peer block w-full rounded-md border-gray-200 py-2 pl-2 text-sm placeholder:text-gray-500"
+            placeholder="Preco"
+            className="outline-none border-3 focus:border-black 
+              peer block w-full rounded-md border-gray-200 
+              py-2 pl-2 text-sm outline-2 placeholder:text-gray-500"
           />
-          <textarea
-            name="description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            className="outline-none border-3 focus:border-black peer block w-full h-40 rounded-md border-gray-200 p-2 text-sm placeholder:text-gray-500 resize-none"
-          ></textarea>
         </div>
 
-        {/* Imagem */}
+        {/* imagem */}
         <div className="flex flex-col items-center my-4">
           <label
             htmlFor="fileInput"
@@ -112,7 +91,7 @@ export default function Form({
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
           >
-            {!preview ? (
+            {preview == null ? (
               <>
                 <svg
                   className="w-10 h-10 text-gray-400 mb-2"
@@ -132,7 +111,11 @@ export default function Form({
                 </span>
               </>
             ) : (
-              <img src={preview} alt="Preview" className="object-cover w-full h-full" />
+              <img
+                src={preview}
+                alt="Preview"
+                className="object-cover w-full h-full"
+              />
             )}
           </label>
 
@@ -144,11 +127,10 @@ export default function Form({
             className="hidden"
             onChange={handleChange}
           />
-
+          
           {file && (
             <button
               onClick={removeFile}
-              type="button"
               className="mt-2 px-3 py-1 bg-red-500 text-white text-sm rounded hover:bg-red-600"
             >
               Remover imagem
@@ -156,7 +138,7 @@ export default function Form({
           )}
         </div>
 
-        <div className="w-full flex flex-col gap-2">
+        <div className='w-full flex flex-col gap-2'> 
           <Link
             href={`/stock-manager/products/`}
             className="flex items-center justify-center bg-gray-200 text-black px-4 py-2 rounded h-14 text-xl"
@@ -165,7 +147,8 @@ export default function Form({
           </Link>
           <button
             type="submit"
-            className="bg-black text-white px-4 py-2 rounded h-14 text-xl cursor-pointer"
+            className="bg-black text-white px-4 py-2 
+            rounded h-14 text-xl cursor-pointer"
           >
             Salvar
           </button>
