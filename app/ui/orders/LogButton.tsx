@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Button } from './button';
+import { Button } from './buttons';
 
 export default function LogButton({
   products,
@@ -23,16 +23,13 @@ export default function LogButton({
   return (
     <div className="mt-3 flex items-center gap-4">
       <div className="flex items-center gap-2">
-        <label htmlFor="mesa" className="text-gray-700 font-medium">
-          Mesa:
-        </label>
         <select
           id="mesa"
           className="border rounded px-3 py-2"
           value={selectedTable ?? ''}
           onChange={(e) => setSelectedTable(Number(e.target.value))}
         >
-          <option value="">Selecione</option>
+          <option value="">Mesa</option>
           {[new Array(nTables)].map((_, i) => (
             <option key={i + 1} value={i + 1}>
               Mesa {i + 1}
