@@ -38,8 +38,8 @@ export default function OrderList({
             onChange={(e) => handleQuantityChange(product.id, Number(e.target.value))}
           >
             {Array.from({ length: 30 }, (_, i) => (
-              <option key={String.fromCodePoint(97 + i)} value={i}>
-                {String.fromCodePoint(97 + i)}
+              <option key={`${i}`} value={i}>
+                {`${i}`}
               </option>
             ))}
           </select>
