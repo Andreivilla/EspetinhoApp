@@ -19,7 +19,7 @@ export default async function Page({
   return (
     <div>
       <div className='w-full'>
-        <h1>Produtos - {totalPages}</h1>
+        <h1>Produtos</h1>
         <div className='md:h-10 h-22 flex flex-col md:flex-row gap-2'>
             <div className='flex-1 md:flex-3'>
               <Search placeholder='Digite o nome do produto.' />
@@ -29,8 +29,10 @@ export default async function Page({
             </div>
         </div>
       </div>
+      <div className='pb-10'>
         <ProductGrid query={query} currentPage={currentPage} />
-          <div className="mt-5 flex w-fu ll justify-center">
+      </div>
+      <div className="mt-5 flex w-full justify-center">
         <Pagination totalPages={totalPages}/>
       </div>
     </div>
