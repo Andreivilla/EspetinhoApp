@@ -67,7 +67,12 @@ export async function createOrder(
 ) {
   const order = await createOrderNoItens();
   if (order.success){
-    console.log('id pedido: ', order.id);
+    for (const productId in quantities) {
+      const quantity = quantities[Number(productId)];
+      console.log(`Produto ${productId} - Quantidade: ${quantity}`);
+    
+    // Aqui você pode adicionar lógica para processar cada item
+  }
   }
   //if(quantities !== null) validar no client aqui só garantir com zod
   //modal de confirmação com lista de produtos
