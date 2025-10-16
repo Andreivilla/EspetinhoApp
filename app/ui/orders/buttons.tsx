@@ -1,9 +1,9 @@
-import * as React from 'react';
-
+import { createOrder } from "@/app/lib/orders/actions";
 type ButtonProps = {
   quantities: Record<number, number>;
   selectedTable: number | null;
 };
+
 
 export function Button({ 
   quantities, 
@@ -12,8 +12,9 @@ export function Button({
   quantities: Record<number, number>;
   selectedTable: number | null;
 }>) {
-  function handleClick() {
-    console.log('🧾 Quantities:', quantities, '🍽️ Mesa selecionada:', selectedTable);
+
+  async function handleClick() {
+    await createOrder(quantities, selectedTable);
   }
 
   return (

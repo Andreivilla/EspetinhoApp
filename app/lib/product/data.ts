@@ -41,3 +41,14 @@ export async function fetchProductById(id: string): Promise<Produto | null> {
     return null;
   }
 }
+
+export async function fetchProductPriceById(id: string): Promise<number | null> {
+  try {
+    const sql = 'SELECT valor FROM PRODUTOS WHERE id = ?';
+    const result = await getQuery<{ valor: number }>(sql, [id]);
+    return result?.valor ?? null;
+  } catch (error) {
+    console.error('Erro ao buscar o preço do produto:', (error as Error).message);
+    return null;
+  }
+}
