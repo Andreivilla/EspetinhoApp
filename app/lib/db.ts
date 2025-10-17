@@ -101,19 +101,22 @@ export async function getAll<T = unknown>(
 export async function runMutation(
   sql: string,
   params: unknown[] = []
-): Promise<{ success: boolean; changes?: number; error?: string }> {
+): Promise<{ success: boolean; changes?: number; lastID?: number; error?: string }> {
   try {
-    const result = await new Promise<{ changes: number }>((resolve, reject) => {
+    const result = await new Promise<{ changes: number; lastID: number }>((resolve, reject) => {
       db.run(sql, params, function (err) {
         if (err) {
           reject(err);
         } else {
-          resolve({ changes: this.changes }); // this.changes = número de linhas afetadas
+          resolve({
+            changes: this.changes,
+            lastID: this.lastID, // pega o id gerado
+          });
         }
       });
     });
 
-    return { success: true, changes: result.changes };
+    return { success: true, changes: result.changes, lastID: result.lastID };
   } catch (error) {
     return { success: false, error: (error as Error).message };
   }

@@ -2,8 +2,8 @@ import Search from '@/app/ui/search';
 import { fetchProductsPages, fetchFilteredProducts } from '@/app/lib/product/data';
 import Pagination from '@/app/ui/products/pagination';
 import OrderList from '@/app/ui/orders/orderList';
-import LogButton from '@/app/ui/orders/LogButton';
 import { fetchNTables } from '@/app/lib/tables/data';
+
 function serializeProducts(products: any[]) {
   return products.map((p) => {
     if (p.imagem && p.imagem instanceof Uint8Array) {
@@ -32,7 +32,7 @@ export default async function Page({
   const totalPages = await fetchProductsPages(query);
   const productsRaw = await fetchFilteredProducts(query, currentPage);
   const products = serializeProducts(productsRaw);
-  const nTables = await fetchNTables();
+  const nTables = await fetchNTables() ?? 0;
 
   return (
     <div>
@@ -42,9 +42,11 @@ export default async function Page({
             <Search placeholder='Digite o nome do produto.' />
           </div>
         </div>
-        <LogButton products={products} nTables={nTables} />
+        {/*
+        <LogButton products={products} nTables={2} />
+         */}
       </div>
-      <OrderList products={products} />
+      <OrderList products={products} nTables={nTables}/>
 
       <div className="mt-5 flex w-full justify-center">
         <Pagination totalPages={totalPages} />

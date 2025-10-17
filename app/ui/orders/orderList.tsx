@@ -1,19 +1,50 @@
 'use client';
-
+import { Button } from './buttons';
 import { useState } from 'react';
 
 export default function OrderList({ 
-  products 
+  products,
+  nTables
 }: Readonly<{ 
-  products: any[] 
+  products: any[],
+  nTables: number, 
 }>) {
+  const [selectedTable, setSelectedTable] = useState<number | null>(null);
   const [quantities, setQuantities] = useState<Record<number, number>>({});
 
   function handleQuantityChange(productId: number, value: number) {
-    setQuantities((prev) => ({ ...prev, [productId]: value }));
+    if (value === 0 && productId in quantities){
+      setQuantities((prev) => {
+        const del = { ...prev };
+        delete del[productId];
+        return del;
+      });
+    }else{
+      setQuantities((prev) => ({...prev, [productId]: value}));
+    }
   }
 
   return (
+    <>
+      <div className="mt-3 flex items-center gap-4">
+        <div className="flex items-center gap-2">
+          <select
+            id="mesa"
+            className="border rounded px-3 py-2"
+            value={selectedTable ?? ''}
+            onChange={(e) => setSelectedTable(Number(e.target.value))}
+          >
+            <option value="">Mesa</option>
+            {[new Array(nTables)].map((_, i) => (
+              <option key={i + 1} value={i + 1}>
+                Mesa {i + 1}
+              </option>
+            ))}
+          </select>
+        </div>
+        <Button quantities={quantities} selectedTable={selectedTable} />
+      </div>
+
     <div className="flex flex-col gap-2 justify-center">
       {products?.map((product) => (
         <div key={product.id} className="bg-white w-full shadow-md rounded-lg p-4 flex flex-row items-center justify-between">
@@ -38,13 +69,14 @@ export default function OrderList({
             onChange={(e) => handleQuantityChange(product.id, Number(e.target.value))}
           >
             {Array.from({ length: 30 }, (_, i) => (
-              <option key={String.fromCodePoint(97 + i)} value={i}>
-                {String.fromCodePoint(97 + i)}
+              <option key={`${i}`} value={i}>
+                {`${i}`}
               </option>
             ))}
           </select>
         </div>
       ))}
     </div>
+    </>
   );
 }
