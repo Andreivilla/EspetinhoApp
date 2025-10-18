@@ -1,54 +1,82 @@
 'use server'
-import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
-import { z } from 'zod'
 import { runMutation } from '../db';
+import { z } from 'zod'
+import { fetchProductPriceById } from '../product/data';
 
-//const prisma = new PrismaClient();
-//product crud
-const FormSchema = z.object({
-  id: z.string(),
-  name: z.string().min(1, { message: 'Product name is required.' }),
-  price: z.coerce.number().gt(0, { message: 'Price must be greater than 0.' }),
-  image: z.instanceof(File).optional()
-})
+const PedidoItemSchema = z.object({
+  id: z.number().int().positive().optional(),
+  id_produto: z.number().int().positive({ message: 'Produto é obrigatório.' }),
+  id_pedido: z.number().int().positive({ message: 'Pedido é obrigatório.' }),
+  quantidade: z.number().int().min(1, { message: 'Quantidade deve ser pelo menos 1.' })
+});
 
-export type State = {
-  errors?: {
-    name?: string[];
-    price?: string[];
-    image?: string[];
+const PedidoSchema = z.object({
+  id: z.number().int().positive().optional(),
+  data: z.coerce.date({ message: 'Data inválida ou ausente.' }),
+  situacao: z.enum(['ABERTO', 'PAGO', 'CANCELADO']).refine(
+    (val) => ['ABERTO', 'PAGO', 'CANCELADO'].includes(val),
+    { message: 'Situação deve ser ABERTO, PAGO ou CANCELADO.' }
+  )
+});
+
+export async function createOrderItem() {
+  console.log('em progresso');
+}
+
+export async function createOrderNoItens() {
+  const CreateOrder = PedidoSchema.omit({ id: true });
+
+  const validatedFields = CreateOrder.safeParse({
+    data: new Date(),
+    situacao: 'ABERTO',
+  });
+
+  if (!validatedFields.success) {
+    console.log("Erros de validação:", validatedFields.error.issues);
+    return {
+      success: false,
+      message: "Campos inválidos ou ausentes. Falha ao criar pedido.",
+    };
+  }
+
+  const { data, situacao } = validatedFields.data;
+  const sql = `INSERT INTO PEDIDOS (data, situacao) VALUES (?, ?)`;
+  const params = [data, situacao];
+
+  const { success, error, lastID } = await runMutation(sql, params);
+
+  if (!success) {
+    console.error("Erro ao inserir pedido:", error);
+    return {
+      success: false,
+      message: "Erro ao criar pedido.",
+    };
+  }
+
+  return {
+    success: true,
+    //message: "Pedido criado com sucesso.",
+    id: lastID,
   };
-  message?: string | null;
-};
-
-export async function createOrder() {
-  const sql = `INSERT INTO MESAS (id) SELECT 
-    COALESCE(MAX(id), 0) + 1 FROM MESAS;`;
-  
-  const result = await runMutation(sql);
-
-  if (!result.success) {
-    console.error('Erro ao adicionar mesa:', result.error);
-    return;
-  }
-
-  revalidatePath('/stock-manager/tables');
-  redirect('/stock-manager/tables');
 }
 
-export async function deleteTable() {
-  const sql = `DELETE FROM MESAS
-    WHERE id = (SELECT MAX(id) FROM MESAS);`;
-  
-  const result = await runMutation(sql);
 
-  if (!result.success) {
-    console.error('Erro ao deletar mesa:', result.error);
-    return;
+export async function createOrder(
+  quantities: Record<number, number>, 
+  selectedTable: number | null,
+) {
+  const order = await createOrderNoItens();
+  if (order.success){
+    for (const productId in quantities) {
+      const quantity = quantities[Number(productId)];
+      console.log(`Produto ${productId} - Quantidade: ${quantity}`);
+    
+    // Aqui você pode adicionar lógica para processar cada item
   }
-
-  revalidatePath('/stock-manager/tables');
-  redirect('/stock-manager/tables');
+  }
+  //if(quantities !== null) validar no client aqui só garantir com zod
+  //modal de confirmação com lista de produtos
+  //const preco = await fetchProductPriceById('15');
+  //console.log('preco:', preco);
+  //console.log('quantities:', quantities, 'selectedTable:', selectedTable);
 }
-
