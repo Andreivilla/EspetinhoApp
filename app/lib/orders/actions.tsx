@@ -7,7 +7,8 @@ const PedidoItemSchema = z.object({
   id: z.number().int().positive().optional(),
   id_produto: z.number().int().positive({ message: 'Produto é obrigatório.' }),
   id_pedido: z.number().int().positive({ message: 'Pedido é obrigatório.' }),
-  quantidade: z.number().int().min(1, { message: 'Quantidade deve ser pelo menos 1.' })
+  quantidade: z.number().int().min(1, { message: 'Quantidade deve ser pelo menos 1.' }),
+  valor: z.number().min(0, { message: 'Valor deve ser um número positivo.' })
 });
 
 const PedidoSchema = z.object({
@@ -19,8 +20,49 @@ const PedidoSchema = z.object({
   )
 });
 
-export async function createOrderItem() {
-  console.log('em progresso');
+export async function createOrderItem(
+  id_produto_param: number,
+  quantitie_param: number,
+  id_pedido_param: number
+) {
+  const CreateOrderItem = PedidoItemSchema.omit({ id: true});
+  const valor_fetch = await fetchProductPriceById(String(id_produto_param));
+  
+  if (valor_fetch == null) {
+    throw new Error('Produto não encontrado ou sem preço definido.');
+  }
+
+  const validatedFields = CreateOrderItem.safeParse({
+    id_produto: id_produto_param,
+    id_pedido: id_pedido_param,
+    quantidade: quantitie_param,
+    valor: quantitie_param*valor_fetch,
+  })
+
+    if (!validatedFields.success) {
+    console.log("Erros de validação:", validatedFields.error.issues);
+    return {
+      success: false,
+      message: "Campos inválidos ou ausentes. Falha ao criar item pedido.",
+    };
+  }
+
+  const { id_produto, id_pedido, quantidade, valor } = validatedFields.data;
+  const sql = `INSERT INTO PEDIDOITEM (id_produto, id_pedido, quantidade, valor) VALUES (?, ?, ?, ?)`;
+  const params = [id_produto, id_pedido, quantidade , valor];
+  
+  const { success, error, lastID } = await runMutation(sql, params);
+  if (!success) {
+    return {
+      success: false,
+      message: "Erro ao criar pedido.",
+    };
+  }
+
+  return {
+    success: true,
+    id: lastID,
+  };
 }
 
 export async function createOrderNoItens() {
@@ -66,13 +108,15 @@ export async function createOrder(
   selectedTable: number | null,
 ) {
   const order = await createOrderNoItens();
-  if (order.success){
+  if (order.success && order.id !== undefined) {
     for (const productId in quantities) {
       const quantity = quantities[Number(productId)];
-      console.log(`Produto ${productId} - Quantidade: ${quantity}`);
-    
-    // Aqui você pode adicionar lógica para processar cada item
-  }
+      await createOrderItem(
+        Number(productId),
+        quantity,
+        order.id,
+      )
+    }
   }
   //if(quantities !== null) validar no client aqui só garantir com zod
   //modal de confirmação com lista de produtos
