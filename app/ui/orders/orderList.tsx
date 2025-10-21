@@ -1,5 +1,6 @@
 'use client';
-import { Button } from './buttons';
+//import { Button } from './buttons';
+import { FinalizarPedidoModal } from './buttonsClient';
 import { useState } from 'react';
 
 export default function OrderList({ 
@@ -42,7 +43,10 @@ export default function OrderList({
             ))}
           </select>
         </div>
-        <Button quantities={quantities} selectedTable={selectedTable} />
+        <FinalizarPedidoModal quantities={quantities} selectedTable={selectedTable}/>
+        {/*
+        <Button quantities={quantities} selectedTable={selectedTable} />*/}
+        
       </div>
 
     <div className="flex flex-col gap-2 justify-center">

@@ -5,7 +5,7 @@ type ButtonProps = {
 };
 
 
-export function Button({ 
+export function FinalizarPedido({ 
   quantities, 
   selectedTable 
 }: Readonly <{

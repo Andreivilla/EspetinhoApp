@@ -42,9 +42,6 @@ export default async function Page({
             <Search placeholder='Digite o nome do produto.' />
           </div>
         </div>
-        {/*
-        <LogButton products={products} nTables={2} />
-         */}
       </div>
       <OrderList products={products} nTables={nTables}/>
 
