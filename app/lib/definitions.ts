@@ -23,3 +23,11 @@ export type PedidoItem = {
   valor: number;
   produto?: Produto; // opcional, se quiser incluir os dados do produto
 };
+
+export type ProdutoSelect = {
+  id: number;
+  nome: string;
+  valor: number;
+  imagem?: Uint8Array | null;
+  quantitie: number;
+}
