@@ -5,7 +5,7 @@ type ButtonProps = {
 };
 
 
-export function FinalizarPedido({ 
+export function SubmitOrder({ 
   quantities, 
   selectedTable 
 }: Readonly <{
@@ -21,7 +21,7 @@ export function FinalizarPedido({
     <button
       className="rounded-md border p-2 bg-black 
       text-white flex align-center justify-center
-      hover:bg-gray-800"
+      hover:bg-gray-800 w-full"
       onClick={handleClick}
     >
       Finalizar Pedido

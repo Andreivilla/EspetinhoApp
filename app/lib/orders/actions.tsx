@@ -1,4 +1,6 @@
 'use server'
+import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
 import { runMutation } from '../db';
 import { z } from 'zod'
 import { fetchProductPriceById } from '../product/data';
@@ -51,7 +53,7 @@ export async function createOrderItem(
   const sql = `INSERT INTO PEDIDOITEM (id_produto, id_pedido, quantidade, valor) VALUES (?, ?, ?, ?)`;
   const params = [id_produto, id_pedido, quantidade , valor];
   
-  const { success, error, lastID } = await runMutation(sql, params);
+  const { success, lastID } = await runMutation(sql, params);
   if (!success) {
     return {
       success: false,
@@ -117,10 +119,10 @@ export async function createOrder(
         order.id,
       )
     }
+    revalidatePath("/orders/create");
+    redirect("/orders/create");
   }
-  //if(quantities !== null) validar no client aqui só garantir com zod
-  //modal de confirmação com lista de produtos
-  //const preco = await fetchProductPriceById('15');
-  //console.log('preco:', preco);
-  //console.log('quantities:', quantities, 'selectedTable:', selectedTable);
+
+
+  //quando mudar a logica da tela pode precisar de retorno aqui
 }

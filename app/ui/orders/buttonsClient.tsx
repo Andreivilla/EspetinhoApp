@@ -1,11 +1,13 @@
 'use client'
 import { useState } from "react";
-import { FinalizarPedido } from "./buttons";
+import { SubmitOrder } from "./buttons";
 
-export default function FinalizarPedidoModal({ 
-    quantities, 
+export function ConfirmOrderButton({ 
+    products,  
+    quantities,     
     selectedTable 
 }: Readonly <{
+    products: any[],
     quantities: Record<number, number>;
     selectedTable: number | null;
 }>) {
@@ -13,11 +15,11 @@ export default function FinalizarPedidoModal({
   return (
     <>
       <button onClick={() => setIsOpen(true)}
-        className="rounded-md border p-2 bg-red-700
+        className="rounded-md border p-2 bg-black
         text-white flex align-center justify-center
-        hover:bg-gray-800"
+        hover:bg-gray-800 w-full"
       >
-        Deletar Produto
+        Finalizar Pedido
       </button>
       {isOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -28,8 +30,36 @@ export default function FinalizarPedidoModal({
             >
               ✕
             </button>
-            <h2 className="text-xl font-bold mb-2">Deletar Produto</h2>
-            <p className="mb-4">Deseja realmente deletar o produto?</p>
+
+            <div className="flex flex-col gap-2 justify-center">
+              {products
+                ?.filter((product) => quantities[product.id] > 0) // filtra
+                .map((product) => (
+                <div key={product.id} className="bg-white w-full shadow-md rounded-lg p-4 flex flex-row items-center justify-between">
+                  <div className="flex gap-2 justify-center">
+                    {product.imagem ? (
+                      <img className="object-cover w-20 h-20" src={product.imagem} alt={product.nome ?? "produto"} />
+                    ) : (
+                      <div className="flex items-center justify-center w-20 h-20 bg-gray-200 text-gray-500">
+                        Sem imagem
+                      </div>
+                    )}
+
+                    <div className="flex flex-col justify-center">
+                      <h3 className="text-lg font-semibold text-gray-800">{product.nome}</h3>
+                      <p className="text-gray-500 font-bold">R$ {product.valor.toFixed(2)}</p>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h1>{quantities[product.id]}</h1>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+
+
             <button
               onClick={() => setIsOpen(false)}
               className="rounded-md p-2 bg-gray-200 text-black 
@@ -37,7 +67,7 @@ export default function FinalizarPedidoModal({
             >
               Fechar
             </button>
-            <FinalizarPedido quantities={quantities} selectedTable={selectedTable}/>
+            <SubmitOrder quantities={quantities} selectedTable={selectedTable}/>
           </div>
         </div>        
       )}

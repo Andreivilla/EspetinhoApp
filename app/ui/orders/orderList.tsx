@@ -1,6 +1,5 @@
 'use client';
-//import { Button } from './buttons';
-import { FinalizarPedidoModal } from './buttonsClient';
+import { ConfirmOrderButton } from './buttonsClient';
 import { useState } from 'react';
 
 export default function OrderList({ 
@@ -27,8 +26,8 @@ export default function OrderList({
 
   return (
     <>
-      <div className="mt-3 flex items-center gap-4">
-        <div className="flex items-center gap-2">
+      <div className="mt-3 flex items-center gap-2">
+        <div className="flex items-center">
           <select
             id="mesa"
             className="border rounded px-3 py-2"
@@ -43,10 +42,7 @@ export default function OrderList({
             ))}
           </select>
         </div>
-        <FinalizarPedidoModal quantities={quantities} selectedTable={selectedTable}/>
-        {/*
-        <Button quantities={quantities} selectedTable={selectedTable} />*/}
-        
+        <ConfirmOrderButton products={products} quantities={quantities} selectedTable={selectedTable}/>
       </div>
 
     <div className="flex flex-col gap-2 justify-center">
