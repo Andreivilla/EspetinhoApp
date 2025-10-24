@@ -12,7 +12,7 @@ export type Pedido = {
   id: number;
   data: Date;
   situacao: 'ABERTO' | 'PAGO' | 'CANCELADO';
-  itens?: PedidoItem[]; 
+  itens: PedidoItem[] | null;
 };
 
 export type PedidoItem = {
@@ -21,7 +21,7 @@ export type PedidoItem = {
   id_pedido: number;
   quantidade: number;
   valor: number;
-  produto?: Produto;
+  produto: Produto | null;
 };
 
 export type ProdutoSelect = {

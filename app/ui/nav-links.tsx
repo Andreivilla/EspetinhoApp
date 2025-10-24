@@ -10,15 +10,20 @@ import clsx from 'clsx';
 import { IconPicnicTable, IconNote } from '@tabler/icons-react';
 
 const links = [
-  {
-    name: 'Produtos',
-    href: '/stock-manager/products',
-    icon: CubeIcon,
-  },
   { 
     name: 'Home', 
     href: '/stock-manager', 
     icon: HomeIcon 
+  },
+  {
+    name: 'Pedidos',
+    href: '/stock-manager/orders',
+    icon: IconNote,
+  },
+  {
+    name: 'Produtos',
+    href: '/stock-manager/products',
+    icon: CubeIcon,
   },
   { 
     name: 'Ultimos Produtos', 
@@ -30,11 +35,7 @@ const links = [
     href:'/stock-manager/tables',
     icon: IconPicnicTable,
   },
-  {
-    name: 'Pedidos',
-    href: 'stock-manager/Pedi',
-    icon: IconNote,
-  }
+
 ];
 
 export default function NavLinks() {
