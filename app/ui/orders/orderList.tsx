@@ -1,28 +1,52 @@
 'use client';
-import { ConfirmOrderButton } from './buttonsClient';
 import { useState } from 'react';
+import { Produto, ProdutoSelect } from '@/app/lib/definitions';
+import CheckOrder from './buttonsClient';
 
 export default function OrderList({ 
   products,
   nTables
 }: Readonly<{ 
-  products: any[],
+  products: Produto[],
   nTables: number, 
 }>) {
   const [selectedTable, setSelectedTable] = useState<number | null>(null);
   const [quantities, setQuantities] = useState<Record<number, number>>({});
+  const [ produtoSelectList, setProdutoSelectList] = useState<ProdutoSelect[]>([]);
 
-  function handleQuantityChange(productId: number, value: number) {
-    if (value === 0 && productId in quantities){
-      setQuantities((prev) => {
-        const del = { ...prev };
-        delete del[productId];
-        return del;
+ function handleQuantityChange(productId: number, value: number) {
+    const product = products.find(p => p.id === productId);
+    if (!product) return;
+
+    if (value === 0) {
+      setQuantities(prev => {
+        const updated = { ...prev };
+        delete updated[productId];
+        return updated;
       });
-    }else{
-      setQuantities((prev) => ({...prev, [productId]: value}));
+
+      setProdutoSelectList(prev => prev.filter(p => p.id !== productId));
+    } else {
+      setQuantities(prev => ({ ...prev, [productId]: value }));
+
+      setProdutoSelectList(prev => {
+        const existing = prev.find(p => p.id === productId);
+        if (existing) {
+          return prev.map(p =>
+            p.id === productId ? { ...p, quantitie: value } : p
+          );
+        } else {
+          return [
+            ...prev,
+            { ...product, quantitie: value }
+          ];
+        }
+      });
     }
+    console.log(produtoSelectList)
   }
+
+
 
   return (
     <>
@@ -42,7 +66,8 @@ export default function OrderList({
             ))}
           </select>
         </div>
-        <ConfirmOrderButton products={products} quantities={quantities} selectedTable={selectedTable}/>
+        <CheckOrder productSelected={produtoSelectList} quantities={quantities} selectedTable={selectedTable}/>
+        
       </div>
 
     <div className="flex flex-col gap-2 justify-center">

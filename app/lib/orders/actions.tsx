@@ -122,7 +122,4 @@ export async function createOrder(
     revalidatePath("/orders/create");
     redirect("/orders/create");
   }
-
-
-  //quando mudar a logica da tela pode precisar de retorno aqui
 }

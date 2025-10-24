@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { deleteProduct } from '@/app/lib/product/actions';
 
-
 export function CreateProduct() {
   return (
     <Link

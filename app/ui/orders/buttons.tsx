@@ -13,18 +13,17 @@ export function SubmitOrder({
   selectedTable: number | null;
 }>) {
 
-  async function handleClick() {
-    await createOrder(quantities, selectedTable);
-  }
+  const createOrderSet = createOrder.bind(null, quantities, selectedTable); 
 
   return (
+    <form action={createOrderSet}>
     <button
       className="rounded-md border p-2 bg-black 
       text-white flex align-center justify-center
       hover:bg-gray-800 w-full"
-      onClick={handleClick}
     >
       Finalizar Pedido
     </button>
+    </form>
   );
 }

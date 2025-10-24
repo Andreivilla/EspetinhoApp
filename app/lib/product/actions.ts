@@ -4,8 +4,6 @@ import { redirect } from 'next/navigation';
 import { z } from 'zod'
 import { runMutation } from '../db';
 
-//const prisma = new PrismaClient();
-//product crud
 const FormSchema = z.object({
   id: z.string(),
   name: z.string().min(1, { message: 'Product name is required.' }),
@@ -81,7 +79,6 @@ export async function deleteProduct(id: string) {
   revalidatePath('/stock-manager/products');
   redirect('/stock-manager/products');
 }
-//
 
 export async function updateProduct(
   id: number,

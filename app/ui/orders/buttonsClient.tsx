@@ -2,12 +2,14 @@
 import { useState } from "react";
 import { SubmitOrder } from "./buttons";
 
-export function ConfirmOrderButton({ 
-    products,  
-    quantities,     
+import { ProdutoSelect } from "@/app/lib/definitions";
+
+export default function CheckOrder({ 
+    productSelected,
+    quantities, 
     selectedTable 
 }: Readonly <{
-    products: any[],
+    productSelected: ProdutoSelect[];
     quantities: Record<number, number>;
     selectedTable: number | null;
 }>) {
@@ -20,6 +22,7 @@ export function ConfirmOrderButton({
         hover:bg-gray-800 w-full"
       >
         Finalizar Pedido
+        Continuar
       </button>
       {isOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -32,34 +35,28 @@ export function ConfirmOrderButton({
             </button>
 
             <div className="flex flex-col gap-2 justify-center">
-              {products
-                ?.filter((product) => quantities[product.id] > 0) // filtra
-                .map((product) => (
-                <div key={product.id} className="bg-white w-full shadow-md rounded-lg p-4 flex flex-row items-center justify-between">
-                  <div className="flex gap-2 justify-center">
-                    {product.imagem ? (
-                      <img className="object-cover w-20 h-20" src={product.imagem} alt={product.nome ?? "produto"} />
-                    ) : (
-                      <div className="flex items-center justify-center w-20 h-20 bg-gray-200 text-gray-500">
-                        Sem imagem
-                      </div>
-                    )}
-
-                    <div className="flex flex-col justify-center">
-                      <h3 className="text-lg font-semibold text-gray-800">{product.nome}</h3>
-                      <p className="text-gray-500 font-bold">R$ {product.valor.toFixed(2)}</p>
+              {productSelected?.map((product) => (
+              <div key={product.id} className="bg-white w-full shadow-md rounded-lg p-4 flex flex-row items-center justify-between">
+                <div className="flex gap-2 justify-center">
+                  {product.imagem ? (
+                    <img className="object-cover w-20 h-20" src={product.imagem} alt={product.nome ?? "produto"} />
+                  ) : (
+                    <div className="flex items-center justify-center w-20 h-20 bg-gray-200 text-gray-500">
+                      Sem imagem
                     </div>
-                  </div>
+                  )}
 
-                  <div>
-                    <h1>{quantities[product.id]}</h1>
+                  <div className="flex flex-col justify-center">
+                    <h3 className="text-lg font-semibold text-gray-800">{product.nome}</h3>
+                    <p className="text-gray-500 font-bold">R$ {product.valor.toFixed(2)}</p>
                   </div>
                 </div>
-              ))}
-            </div>
 
-
-
+                <h1>{product.quantitie}</h1>
+              </div>
+            ))}
+          </div>
+          
             <button
               onClick={() => setIsOpen(false)}
               className="rounded-md p-2 bg-gray-200 text-black 

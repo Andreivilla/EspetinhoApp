@@ -12,7 +12,7 @@ export type Pedido = {
   id: number;
   data: Date;
   situacao: 'ABERTO' | 'PAGO' | 'CANCELADO';
-  itens?: PedidoItem[]; // opcional, se quiser incluir os itens do pedido
+  itens?: PedidoItem[]; 
 };
 
 export type PedidoItem = {
@@ -21,5 +21,13 @@ export type PedidoItem = {
   id_pedido: number;
   quantidade: number;
   valor: number;
-  produto?: Produto; // opcional, se quiser incluir os dados do produto
+  produto?: Produto;
 };
+
+export type ProdutoSelect = {
+  id: number;
+  nome: string;
+  valor: number;
+  imagem?: Uint8Array | null;
+  quantitie: number;
+}
