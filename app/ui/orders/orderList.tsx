@@ -1,6 +1,5 @@
 'use client';
-//import { Button } from './buttons';
-//import { FinalizarPedidoModal } from './buttonsClient';
+
 import { useState } from 'react';
 import { Produto, ProdutoSelect } from '@/app/lib/definitions';
 import CheckOrder from './buttonsClient';

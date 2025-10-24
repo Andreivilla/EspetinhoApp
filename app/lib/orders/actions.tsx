@@ -51,7 +51,7 @@ export async function createOrderItem(
   const sql = `INSERT INTO PEDIDOITEM (id_produto, id_pedido, quantidade, valor) VALUES (?, ?, ?, ?)`;
   const params = [id_produto, id_pedido, quantidade , valor];
   
-  const { success, error, lastID } = await runMutation(sql, params);
+  const { success, lastID } = await runMutation(sql, params);
   if (!success) {
     return {
       success: false,
