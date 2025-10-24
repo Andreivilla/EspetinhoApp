@@ -67,7 +67,9 @@ export async function createOrderItem(
   };
 }
 
-export async function createOrderNoItens() {
+export async function createOrderNoItens(
+  table: number | null, 
+) {
   const CreateOrder = PedidoSchema.omit({ id: true });
 
   const validatedFields = CreateOrder.safeParse({
@@ -84,8 +86,8 @@ export async function createOrderNoItens() {
   }
 
   const { data, situacao } = validatedFields.data;
-  const sql = `INSERT INTO PEDIDOS (data, situacao) VALUES (?, ?)`;
-  const params = [data, situacao];
+  const sql = `INSERT INTO PEDIDOS (data, situacao, id_mesa) VALUES (?, ?, ?)`;
+  const params = [data, situacao, table];
 
   const { success, error, lastID } = await runMutation(sql, params);
 
@@ -109,7 +111,7 @@ export async function createOrder(
   quantities: Record<number, number>, 
   selectedTable: number | null,
 ) {
-  const order = await createOrderNoItens();
+  const order = await createOrderNoItens(selectedTable);
   if (order.success && order.id !== undefined) {
     for (const productId in quantities) {
       const quantity = quantities[Number(productId)];

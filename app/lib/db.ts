@@ -4,10 +4,8 @@ import fs from 'node:fs';
 
 const dbPath = path.resolve(process.cwd(), process.env.DATABASE_PATH || './data/db.db');
 
-// Garante que a pasta exista
 fs.mkdirSync(path.dirname(dbPath), { recursive: true });
 
-// Cria a conexão
 const db = new sqlite3.Database(dbPath, (err) => {
   if (err) {
     console.error('Erro ao abrir o banco de dados:', err.message);
@@ -16,7 +14,6 @@ const db = new sqlite3.Database(dbPath, (err) => {
   }
 });
 
-// Inicializa o banco se necessário
 export function initializeDatabase() {
   const dbExists = fs.existsSync(dbPath);
   if (!dbExists) {
@@ -24,30 +21,32 @@ export function initializeDatabase() {
 
     db.exec(`
       CREATE TABLE MESAS (
-          id INTEGER PRIMARY KEY AUTOINCREMENT
+        id INTEGER PRIMARY KEY AUTOINCREMENT
       );
 
       CREATE TABLE PRODUTOS (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          imagem BLOB,
-          valor DECIMAL(20,2),
-          nome TEXT
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        imagem BLOB,
+        valor DECIMAL(20,2),
+        nome TEXT
       );
 
       CREATE TABLE PEDIDOS (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          data DATETIME,
-          situacao TEXT CHECK(situacao IN ('ABERTO', 'PAGO', 'CANCELADO'))
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id_mesa INTEGER,
+        data DATETIME,
+        situacao TEXT CHECK(situacao IN ('ABERTO', 'PAGO', 'CANCELADO')),
+        FOREIGN KEY (id_mesa) REFERENCES MESAS(id)
       );
 
       CREATE TABLE PEDIDOITEM (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          id_produto INTEGER,
-          id_pedido INTEGER,
-          quantidade INTEGER,
-          valor DECIMAL(20,2),
-          FOREIGN KEY (id_produto) REFERENCES PRODUTO(id),
-          FOREIGN KEY (id_pedido) REFERENCES PEDIDO(id)
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id_produto INTEGER,
+        id_pedido INTEGER,
+        quantidade INTEGER,
+        valor DECIMAL(20,2),
+        FOREIGN KEY (id_produto) REFERENCES PRODUTO(id),
+        FOREIGN KEY (id_pedido) REFERENCES PEDIDO(id)
       );
     `);
 

@@ -6,13 +6,15 @@ CREATE TABLE PRODUTOS (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     image BLOB,
     valor DECIMAL(20,2),
-    nome TEXT
+    nome TEXT,    
 );
 
 CREATE TABLE PEDIDOS (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id_mesa INTEGER,
     data DATETIME,
     situacao TEXT CHECK(situacao IN ('ABERTO', 'PAGO', 'CANCELADO'))
+    FOREIGN KEY (id_mesa) REFERENCES MESAS(id)
 );
 
 CREATE TABLE PEDIDOITEM (
@@ -20,7 +22,7 @@ CREATE TABLE PEDIDOITEM (
     id_produto INTEGER,
     id_pedido INTEGER,
     quantidade INTEGER,
-    valor DECIMAL(20,2),--tem que tirar esse valor
+    valor DECIMAL(20,2),
     FOREIGN KEY (id_produto) REFERENCES PRODUTO(id),
     FOREIGN KEY (id_pedido) REFERENCES PEDIDO(id)
 );
