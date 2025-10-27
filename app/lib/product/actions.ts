@@ -108,7 +108,6 @@ export async function updateProduct(
     bufferImage = Buffer.from(arrayBuffer);
   }
 
-  // Atualiza somente os campos alterados
   const sql = bufferImage
     ? `UPDATE PRODUTOS SET nome = ?, valor = ?, imagem = ? WHERE id = ?`
     : `UPDATE PRODUTOS SET nome = ?, valor = ? WHERE id = ?`;
@@ -118,7 +117,7 @@ export async function updateProduct(
     : [name, price, id];
 
   const { success, error } = await runMutation(sql, params);
-  console.log('sucess', success)
+
   if (!success) {
     console.error("Erro ao atualizar produto:", error);
     return {

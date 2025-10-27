@@ -1,6 +1,7 @@
 import { fetchFilteredProducts } from "@/app/lib/product/data";
 import { UpdateProduct } from "./buttons";
 import DeleteModal from "./deleteModal";
+import Image from "next/image";
 
 export default async function ProductGrid({
   query,
@@ -9,6 +10,7 @@ export default async function ProductGrid({
   query: string;
   currentPage: number;
 }>) {
+
   const products = await fetchFilteredProducts(query, currentPage);
   
   return (
@@ -21,7 +23,14 @@ export default async function ProductGrid({
           >
             <div className="h-1/2">
               {product.imagem ? (
-                <img className="object-cover w-full h-full" src={product.imagem} alt={product.nome ?? "produto"} />
+                <div className="relative w-full h-full">
+                  <Image
+                    src={`${product.imagem}?cacheBust=${Date.now()}`}
+                    alt={product.nome ?? "produto"}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
               ) : (
                 <div className="flex items-center justify-center w-full h-full bg-gray-200 text-gray-500">
                   Sem imagem
