@@ -16,7 +16,7 @@ export default async function Page({
 }: Readonly<{
   params: Promise<{ id: string }>
 }>) {
-  const { id } = await params; // ← precisa de await aqui (ver erro 3 abaixo)
+  const { id } = await params;
   
   const product = await fetchProductById(id);
   

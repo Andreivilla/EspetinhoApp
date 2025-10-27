@@ -52,3 +52,15 @@ export async function fetchProductPriceById(id: string): Promise<number | null> 
     return null;
   }
 }
+
+export async function fetchProductImageById(id: string) {
+  try {
+    const sql = 'SELECT imagem FROM PRODUTOS WHERE id = ?';
+    const result = await getQuery<{imagem: Buffer}>(sql, [id]);
+    console.log(result)
+    return result?.imagem ?? null;
+  } catch (error) {
+    console.error('Erro na busca da imagem: ', (error as Error).message);
+    return null
+  }
+}
