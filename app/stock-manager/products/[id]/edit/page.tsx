@@ -1,15 +1,8 @@
 import Breadcrumbs from '@/app/ui/breadcrumbs';
 import Form from '@/app/ui/products/edit-form';
-import { Produto } from '@/app/lib/definitions';
 import { fetchProductById } from '@/app/lib/product/data';
 import { notFound } from 'next/navigation'; 
 
-function serializeProduto(produto: Produto): Omit<Produto, 'imagem'> & { imagem?: string | null } {
-  return {
-    ...produto,
-    imagem: produto.imagem ? Buffer.from(produto.imagem).toString('base64') : null,
-  };
-}
 
 export default async function Page({
   params,
@@ -23,7 +16,6 @@ export default async function Page({
   if (!product) {
     notFound();
   }
- const serializableProduct = serializeProduto(product);
   return (
     <main>
       <Breadcrumbs
@@ -36,7 +28,7 @@ export default async function Page({
           },
         ]}
       />
-      <Form product={serializableProduct}/>
+      <Form product={product}/>
     </main>
   );
 }

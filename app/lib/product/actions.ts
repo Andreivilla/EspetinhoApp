@@ -118,7 +118,7 @@ export async function updateProduct(
     : [name, price, id];
 
   const { success, error } = await runMutation(sql, params);
-
+  console.log('sucess', success)
   if (!success) {
     console.error("Erro ao atualizar produto:", error);
     return {
