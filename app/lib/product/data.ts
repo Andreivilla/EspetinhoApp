@@ -1,6 +1,5 @@
 import { Produto } from '../definitions';
 import { getQuery, getAll } from '../db';
-//const prisma = new PrismaClient();// apagar
 
 const ITEMS_PER_PAGE = 6;
 
@@ -12,10 +11,21 @@ export async function fetchProductsPages(query: string): Promise<number> {
   return Math.ceil((result?.total ?? 0) / ITEMS_PER_PAGE);  
 }
 
+async function isImageAvailable(id: number): Promise<string | null> {
+  const baseUrl = process.env.BASE_URL;
+  const url = `${baseUrl}/stock-manager/products/${id}/image`
+
+  try {
+    const response = await fetch(url, { method: 'HEAD' });
+    
+    return response.ok ? url : null;
+  } catch {
+    return null;
+  }
+}
 export async function fetchFilteredProducts(query: string, currentPage: number): Promise<Produto[]> {
   const offset = (currentPage - 1) * ITEMS_PER_PAGE;
-  const sql = `SELECT id, nome, valor, imagem
-    FROM PRODUTOS
+  const sql = `SELECT id, nome, valor FROM PRODUTOS
     WHERE LOWER(nome) LIKE ?
     ORDER BY nome ASC
     LIMIT ? OFFSET ?`;
@@ -28,14 +38,35 @@ export async function fetchFilteredProducts(query: string, currentPage: number):
     console.error('Erro ao buscar produtos:', error);
     return [];
   }
-  return data;
+
+  const produtosComImagem = await Promise.all(
+    data.map(async (produto) => {
+      const imagem = await isImageAvailable(produto.id);
+      return {
+        ...produto,
+        imagem,
+      };
+    })
+  );
+
+  return produtosComImagem;
 }
+
 
 export async function fetchProductById(id: string): Promise<Produto | null> {
   try {
-    const sql = 'SELECT * FROM PRODUTOS WHERE id = ?';
+    const sql = 'SELECT id, nome, valor FROM PRODUTOS WHERE id = ?';
     const product = await getQuery<Produto>(sql, [id]);
-    return product;
+
+    if (!product) return null;
+
+    const baseUrl = process.env.BASE_URL;
+    const imagemUrl = `${baseUrl}/stock-manager/products/${product.id}/image`;
+
+    return {
+      ...product,
+      imagem: imagemUrl,
+    };
   } catch (error) {
     console.error('Erro ao buscar o produto:', (error as Error).message);
     return null;
@@ -57,7 +88,6 @@ export async function fetchProductImageById(id: string) {
   try {
     const sql = 'SELECT imagem FROM PRODUTOS WHERE id = ?';
     const result = await getQuery<{imagem: Buffer}>(sql, [id]);
-    console.log(result)
     return result?.imagem ?? null;
   } catch (error) {
     console.error('Erro na busca da imagem: ', (error as Error).message);

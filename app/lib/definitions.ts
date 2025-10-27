@@ -2,7 +2,7 @@ export type Produto = {
   id: number;
   nome: string;
   valor: number;
-  imagem?: Uint8Array | null;
+  imagem?: string | null;
 };
 export type Mesa = {
   id: number;

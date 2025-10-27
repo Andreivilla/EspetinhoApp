@@ -7,7 +7,7 @@ export async function GET(
 ) {
   const imagem = await fetchProductImageById(params.id);
 
-  if (!imagem) {
+  if (!imagem || imagem?.length === 0) {
     return new NextResponse("Imagem não encontrada ou produto sem imagem", {
       status: 404,
     });
