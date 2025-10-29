@@ -4,13 +4,11 @@ import { redirect } from 'next/navigation';
 import { z } from 'zod'
 import { runMutation } from '../db';
 
-//const prisma = new PrismaClient();
-//product crud
 const FormSchema = z.object({
   id: z.string(),
   name: z.string().min(1, { message: 'Product name is required.' }),
   price: z.coerce.number().gt(0, { message: 'Price must be greater than 0.' }),
-  image: z.instanceof(File).optional()
+  image: z.string().optional()
 })
 
 export type State = {

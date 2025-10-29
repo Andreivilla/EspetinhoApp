@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { SubmitOrder } from "./buttons";
 
-import { ProdutoSelect } from "@/app/lib/definitions";
+import { Pedido, ProdutoSelect } from "@/app/lib/definitions";
 
 export default function CheckOrder({ 
     productSelected,
@@ -70,4 +70,44 @@ export default function CheckOrder({
       )}
     </>
   );
+}
+
+export function CheckOrderAdmin({
+  pedido
+}: Readonly <{
+  pedido: Pedido
+}>) {
+  const [isOpen, setIsOpen] = useState(false);
+  return (
+    <>
+      <button onClick={() => setIsOpen(true)} className="w-full p-4 rounded-md shadow flex flex-col items-center ">
+        <div className="grid grid-cols-3 w-full mb-2">
+          <h2 className="text-left font-bold">Mesa {pedido.id_mesa}</h2>
+          <p className="text-center">{new Date(pedido.data).toLocaleDateString('pt-BR')}</p>
+          <span className="text-right text-green-600">R$: {pedido.total}</span>
+        </div>
+
+        <div className="w-full border-t border-gray-300 mt-2 pt-2 text-sm text-start">
+          <h3 className="text-gray-800">Itens: </h3>
+          {pedido.itens?.map((item) => (
+            <p className="text-gray-500" key={item.id_produto}>{item.produto?.nome}</p>
+          ))}
+        </div>
+      </button>
+      {isOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded shadow-lg w-full max-w-md relative">
+            <button
+              onClick={() => setIsOpen(false)}
+              className="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
+            >
+              ✕
+            </button>
+
+            <p>produto vai aqui</p>
+          </div>
+        </div>        
+      )}
+    </>
+  )
 }

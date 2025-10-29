@@ -11,6 +11,8 @@ export type Mesa = {
 export type Pedido = {
   id: number;
   data: Date;
+  id_mesa: number;
+  total: number;
   situacao: 'ABERTO' | 'PAGO' | 'CANCELADO';
   itens: PedidoItem[] | null;
 };
@@ -28,6 +30,6 @@ export type ProdutoSelect = {
   id: number;
   nome: string;
   valor: number;
-  imagem?: Uint8Array | null;
+  imagem?: string | null;
   quantitie: number;
 }

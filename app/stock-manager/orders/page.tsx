@@ -10,13 +10,11 @@ export default async function Page({
     const params = await searchParams;
 
   const query = params?.query || '';
-  const currentPage = Number(params?.page) || 1;    
-  const totalPages = await fetchProductsPages(query);
+  //const currentPage = Number(params?.page) || 1;    
+  //const totalPages = await fetchProductsPages(query);
 
-  //
   const ordersList = await fetchOrdersBySituacao('ABERTO');
 
-  //console.log('orederList', ordersList);
 
   return (
     <div>

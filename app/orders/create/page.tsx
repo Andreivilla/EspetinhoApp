@@ -4,19 +4,6 @@ import Pagination from '@/app/ui/products/pagination';
 import OrderList from '@/app/ui/orders/orderList';
 import { fetchNTables } from '@/app/lib/tables/data';
 
-function serializeProducts(products: any[]) {
-  return products.map((p) => {
-    if (p.imagem && p.imagem instanceof Uint8Array) {
-      const b64 = Buffer.from(p.imagem).toString('base64');
-      return {
-        ...p,
-        imagem: `data:image/jpeg;base64,${b64}`, 
-      };
-    }
-    return { ...p, imagem: null };
-  });
-}
-
 export default async function Page({ 
   searchParams 
 }: Readonly<{
@@ -30,8 +17,7 @@ export default async function Page({
   const currentPage = Number(params?.page) || 1;
 
   const totalPages = await fetchProductsPages(query);
-  const productsRaw = await fetchFilteredProducts(query, currentPage);
-  const products = serializeProducts(productsRaw);
+  const products = await fetchFilteredProducts(query, currentPage);
   const nTables = await fetchNTables() ?? 0;
 
   return (
