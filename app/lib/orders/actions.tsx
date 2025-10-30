@@ -106,7 +106,6 @@ export async function createOrderNoItens(
   };
 }
 
-
 export async function createOrder(
   quantities: Record<number, number>, 
   selectedTable: number | null,
@@ -125,3 +124,34 @@ export async function createOrder(
     redirect("/orders/create");
   }
 }
+
+export async function FinalizarOrder(
+  id: number,
+) {
+  const sql = "UPDATE PEDIDOS SET situacao = 'PAGO' WHERE id = ?";
+  const result = await runMutation(sql, [id]);
+
+  if (!result.success) {
+    console.error('Erro ao deletar produto:', result.error);
+    return;
+  }
+
+  revalidatePath('/stock-manager/orders');
+  redirect('/stock-manager/orders');
+}
+
+export async function CancelarOrder(
+  id: number,
+) {
+  const sql = "UPDATE PEDIDOS SET situacao = 'CANCELADO' WHERE id = ?";
+  const result = await runMutation(sql, [id]);
+
+  if (!result.success) {
+    console.error('Erro ao deletar produto:', result.error);
+    return;
+  }
+
+  revalidatePath('/stock-manager/orders');
+  redirect('/stock-manager/orders');
+}
+
