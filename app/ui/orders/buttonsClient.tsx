@@ -1,7 +1,7 @@
 'use client'
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { SubmitOrder } from "./buttons";
-
+import Image from "next/image";
 import { Pedido, ProdutoSelect } from "@/app/lib/definitions";
 
 export default function CheckOrder({ 
@@ -14,6 +14,10 @@ export default function CheckOrder({
     selectedTable: number | null;
 }>) {
   const [isOpen, setIsOpen] = useState(false);
+    const [cacheBust, setCacheBust] = useState('');
+    useEffect(() => {
+      setCacheBust(`?cacheBust=${Date.now()}`);
+    }, []);
   return (
     <>
       <button onClick={() => setIsOpen(true)}
@@ -39,7 +43,16 @@ export default function CheckOrder({
               <div key={product.id} className="bg-white w-full shadow-md rounded-lg p-4 flex flex-row items-center justify-between">
                 <div className="flex gap-2 justify-center">
                   {product.imagem ? (
-                    <img className="object-cover w-20 h-20" src={product.imagem} alt={product.nome ?? "produto"} />
+                    <div className="w-20 h-20 overflow-hidden rounded">
+                      <Image
+                        src={`${product.imagem}${cacheBust}`}
+                        alt={product.nome ?? "produto"}
+                        width={80}
+                        height={80}
+                        className="object-cover"
+                        style={{ objectFit: 'cover' }}
+                      />
+                    </div>
                   ) : (
                     <div className="flex items-center justify-center w-20 h-20 bg-gray-200 text-gray-500">
                       Sem imagem

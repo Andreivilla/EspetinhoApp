@@ -31,8 +31,8 @@ export async function createTable() {
     return;
   }
 
-  revalidatePath('/stock-manager/tables');
-  redirect('/stock-manager/tables');
+  revalidatePath('/stock-manager/');
+  redirect('/stock-manager/');
 }
 
 export async function deleteTable() {
@@ -46,7 +46,7 @@ export async function deleteTable() {
     return;
   }
 
-  revalidatePath('/stock-manager/tables');
-  redirect('/stock-manager/tables');
+  revalidatePath('/stock-manager/');
+  redirect('/stock-manager/');
 }
 

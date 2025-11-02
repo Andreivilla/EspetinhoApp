@@ -25,16 +25,7 @@ const links = [
     href: '/stock-manager/products',
     icon: CubeIcon,
   },
-  { 
-    name: 'Ultimos Produtos', 
-    href: '/LastProducts', 
-    icon: ExclamationCircleIcon,
-  },
-  {
-    name: 'Mesas',
-    href:'/stock-manager/tables',
-    icon: IconPicnicTable,
-  },
+
 
 ];
 
