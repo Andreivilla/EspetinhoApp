@@ -14,7 +14,9 @@ export default function OrderList({
   const [selectedTable, setSelectedTable] = useState<number | null>(null);
   const [quantities, setQuantities] = useState<Record<number, number>>({});
   const [ produtoSelectList, setProdutoSelectList] = useState<ProdutoSelect[]>([]);
-  
+
+  console.log('ntables no list: ', nTables)
+
   const [cacheBust, setCacheBust] = useState('');
   useEffect(() => {
     setCacheBust(`?cacheBust=${Date.now()}`);
@@ -63,11 +65,13 @@ export default function OrderList({
             onChange={(e) => setSelectedTable(Number(e.target.value))}
           >
             <option value="">Mesa</option>
-            {[new Array(nTables)].map((_, i) => (
-              <option key={i + 1} value={i + 1}>
-                Mesa {i + 1}
-              </option>
-            ))}
+            {nTables > 0 &&
+              Array.from({ length: nTables }, (_, i) => (
+                <option key={i + 1} value={i + 1}>
+                  Mesa {i + 1}
+                </option>
+              ))
+            }
           </select>
         </div>
         <CheckOrder productSelected={produtoSelectList} quantities={quantities} selectedTable={selectedTable}/>

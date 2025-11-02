@@ -69,7 +69,7 @@ export default function Form() {
               py-2 pl-2 text-sm outline-2 placeholder:text-gray-500"
           />
           <input
-            type="text"
+            type="num"
             name="price"
             value={price}
             onChange={(e) => setPrice(e.target.value)}

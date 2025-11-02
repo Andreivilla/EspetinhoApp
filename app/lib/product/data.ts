@@ -14,12 +14,11 @@ export async function fetchProductsPages(query: string): Promise<number> {
 async function isImageAvailable(id: number): Promise<string | null> {
   const baseUrl = process.env.BASE_URL;
   const url = `${baseUrl}/stock-manager/products/${id}/image`
-
   try {
-    const response = await fetch(url, { method: 'HEAD' });
-    
+    const response = await fetch(url, { method: 'GET' });
     return response.ok ? url : null;
-  } catch {
+  } catch(error) {
+    console.log('Não foi possivel validar a imagem', error)
     return null;
   }
 }

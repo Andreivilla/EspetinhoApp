@@ -8,7 +8,7 @@ const FormSchema = z.object({
   id: z.string(),
   name: z.string().min(1, { message: 'Product name is required.' }),
   price: z.coerce.number().gt(0, { message: 'Price must be greater than 0.' }),
-  image: z.string().optional()
+  image: z.instanceof(File).optional()
 })
 
 export type State = {

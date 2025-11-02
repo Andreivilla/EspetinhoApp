@@ -19,6 +19,7 @@ export default async function Page({
   const totalPages = await fetchProductsPages(query);
   const products = await fetchFilteredProducts(query, currentPage);
   const nTables = await fetchNTables() ?? 0;
+  console.log('ntables: ', nTables)
 
   return (
     <div>

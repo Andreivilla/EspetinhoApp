@@ -20,7 +20,7 @@ export default async function ProductGrid({
           <div
             key={product.id}
             className="rounded-xl h-100 w-70 overflow-hidden shadow-lg bg-white border border-gray-200 flex flex-col"
-          >
+          > 
             <div className="h-1/2">
               {product.imagem ? (
                 <div className="relative w-full h-full">
@@ -39,11 +39,11 @@ export default async function ProductGrid({
             </div>
 
             <div className="p-4 h-1/2 flex flex-col justify-between">
-              <div className="flex justify-between">
+              <div className="">
                 <div>
                   <h2 className="text-xl font-semibold text-gray-800">{product.nome}</h2>
                 </div>
-                <span className="text-lg font-bold text-green-600">{product.valor}</span>
+                <span className="text-lg font-bold text-gray-500">R$: {Number(product.valor).toFixed(2)}</span>
               </div>
 
               <div className="flex flex-col gap-2 mt-auto">
