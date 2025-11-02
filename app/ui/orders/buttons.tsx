@@ -1,4 +1,5 @@
-import { createOrder } from "@/app/lib/orders/actions";
+import { createOrder, CancelarOrder, FinalizarOrder } from "@/app/lib/orders/actions";
+
 type ButtonProps = {
   quantities: Record<number, number>;
   selectedTable: number | null;
@@ -27,3 +28,43 @@ export function SubmitOrder({
     </form>
   );
 }
+
+export function CancelarPedido({ 
+  id 
+}:Readonly <{ 
+  id: number
+}>){
+  const cancelarOrder = CancelarOrder.bind(null, id);
+ 
+  return (
+    <form action={cancelarOrder}>
+      <button type="submit" 
+        className="rounded-md p-2 bg-black text-white
+        flex align-center justify-center w-full mb-2"
+      >
+        <span>Confirmar</span>
+        
+      </button>
+    </form>
+  );
+}
+export function FinalizarPedido({ 
+  id 
+}:Readonly <{ 
+  id: number
+}>){
+  const finalizarOrder = FinalizarOrder.bind(null, id);
+ 
+  return (
+    <form action={finalizarOrder}>
+      <button type="submit" 
+        className="rounded-md p-2 bg-black text-white
+        flex align-center justify-center w-full mb-2"
+      >
+        <span>Confirmar</span>
+        
+      </button>
+    </form>
+  );
+}
+
