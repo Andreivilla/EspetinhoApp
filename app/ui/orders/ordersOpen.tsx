@@ -1,9 +1,8 @@
 'use client';
-import { useState } from 'react';
-import { Pedido, PedidoItem } from '@/app/lib/definitions';
+import { Pedido } from '@/app/lib/definitions';
 import { CheckOrderAdmin } from './buttonsClient';
 
-export default function OrderOpenList({
+export default function OrdersListAdmin({
   orders,
 }: Readonly<{
   orders: Pedido[] | null

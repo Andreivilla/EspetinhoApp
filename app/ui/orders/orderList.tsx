@@ -4,6 +4,7 @@ import { Produto, ProdutoSelect } from '@/app/lib/definitions';
 import CheckOrder from './buttonsClient';
 import Image from 'next/image';
 
+
 export default function OrderList({ 
   products,
   nTables

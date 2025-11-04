@@ -1,13 +1,22 @@
 'use client';
 import {
-  ExclamationCircleIcon,
   HomeIcon,
   CubeIcon,
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
-import { IconPicnicTable, IconNote } from '@tabler/icons-react';
+import { IconNote, IconCheck, IconNoteOff } from '@tabler/icons-react';
+
+
+function OrderCheckIcon() {
+  return (
+    <div className="relative w-6 h-6">
+      <IconCheck className="absolute bottom-0 right-1.5 w-6 h-6" />
+      <IconNote className="absolute top-0 left-0 w-6 h-6 text-gray-700" />      
+    </div>
+  );
+}
 
 const links = [
   { 
@@ -16,17 +25,26 @@ const links = [
     icon: HomeIcon 
   },
   {
-    name: 'Pedidos',
-    href: '/stock-manager/orders',
+    name: 'Pedidos em Aberto',
+    href: '/stock-manager/orders/open',
     icon: IconNote,
+  },
+  {
+    name: 'Pedidos Concluidos',
+    href: '/stock-manager/orders/finish',
+    icon: OrderCheckIcon,
+  },
+  {
+    name:'Pedidos Cancelados',
+    href: '/stock-manager/orders/cancel',
+    icon: IconNoteOff,
   },
   {
     name: 'Produtos',
     href: '/stock-manager/products',
     icon: CubeIcon,
   },
-
-
+  
 ];
 
 export default function NavLinks() {

@@ -160,11 +160,12 @@ export function CheckOrderAdmin({
                 <h1>Total: </h1>
                 <span>R$: {pedido.total}</span>
               </div>
-
-              <div className="flex place-content-between mt-2 text-xl font-bold">
-                <CalcelarModal id={pedido.id}/>
-                <FinalizarModal id={pedido.id}/>
-              </div>
+              {pedido.situacao == 'ABERTO' && (
+                <div className="flex place-content-between mt-2 text-xl font-bold">
+                  <CalcelarModal id={pedido.id}/>
+                  <FinalizarModal id={pedido.id}/>
+                </div>
+              )}
             </div>
           </div>
         )}

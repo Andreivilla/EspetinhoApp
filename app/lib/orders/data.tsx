@@ -63,10 +63,21 @@ export async function fetchTotalPrice(
 }
 
 
-export async function fetchOrdersBySituacao(situacao: string) {
+export async function fetchOrdersBySituacao(
+  situacao: string, 
+  currentPage?: number, 
+) {
   try{
-    const sql = 'SELECT * FROM PEDIDOS WHERE situacao = ?'
-    const result = await getAll<Pedido>(sql, [situacao]);
+    let result;
+    if(currentPage){
+      const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+      const sql = 'SELECT * FROM PEDIDOS WHERE situacao = ? LIMITE = ? OFFSET = ?';
+      const params = [`%${situacao}%`, ITEMS_PER_PAGE, offset];
+      result = await getAll<Pedido>(sql, params)
+    }else{
+      const sql = 'SELECT * FROM PEDIDOS WHERE situacao = ?';
+      result = await getAll<Pedido>(sql, [situacao]);
+    }
     
     if(result.data === undefined){
       console.log('Erro nenhum pedido em ', situacao);
