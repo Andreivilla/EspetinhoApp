@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
 import { IconNote, IconCheck, IconNoteOff } from '@tabler/icons-react';
+import { IoMdList } from "react-icons/io";
 
 
 function OrderCheckIcon() {
@@ -44,7 +45,11 @@ const links = [
     href: '/stock-manager/products',
     icon: CubeIcon,
   },
-  
+  {
+    name: 'Menu',
+    href: '/stock-manager/menu',
+    icon: IoMdList,
+  },
 ];
 
 export default function NavLinks() {

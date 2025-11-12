@@ -66,3 +66,4 @@ next-env.d.ts
 /app/generated/prisma
 /.scannerwork
 /data/db.db
+note.md
