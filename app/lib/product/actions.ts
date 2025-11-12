@@ -32,7 +32,7 @@ export const createProduct = async (
   const validatedFields = CreateProduct.safeParse({
     name: formData.get("name"),
     price: formData.get("price"),
-    image,
+    image: image,
   });
 
   if (!validatedFields.success) {
@@ -90,7 +90,7 @@ export async function updateProduct(
   const validatedFields = UpdateProduct.safeParse({
     name: formData.get("name"),
     price: formData.get("price"),
-    image,
+    image: image,
   });
 
   if (!validatedFields.success) {

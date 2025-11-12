@@ -4,11 +4,7 @@ import { updateProduct, State } from '@/app/lib/product/actions';
 import Link from 'next/link';
 import { Produto } from '@/app/lib/definitions';
 
-export default function Form({ 
-  product 
-}: Readonly<{ 
-  product: Produto 
-}>) {
+export default function Form({ product }: Readonly<{ product: Produto }>) {
   const [name, setName] = useState(product.nome);
   const [price, setPrice] = useState(product.valor);
 
@@ -20,16 +16,18 @@ export default function Form({
   const [preview, setPreview] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
 
+  // exibe imagem existente
   useEffect(() => {
     if (!product.imagem || preview) return;
 
     if (product.imagem.startsWith('http') || product.imagem.startsWith('/')) {
-      setPreview(product.imagem); // URL normal
+      setPreview(product.imagem);
     } else {
-      setPreview(`data:image/jpeg;base64,${product.imagem}`); 
+      setPreview(`data:image/jpeg;base64,${product.imagem}`);
     }
   }, [product.imagem, preview]);
 
+  // atualiza preview se produto mudar
   useEffect(() => {
     if (!product.imagem) {
       setPreview(null);
@@ -44,7 +42,7 @@ export default function Form({
     }
   }, [product.imagem, file]);
 
-
+  // eventos drag and drop
   const handleDragOver = (e: React.DragEvent<HTMLLabelElement>) => {
     e.preventDefault();
     setIsDragging(true);
@@ -55,16 +53,22 @@ export default function Form({
   const handleDrop = (e: React.DragEvent<HTMLLabelElement>) => {
     e.preventDefault();
     setIsDragging(false);
-    if (e.dataTransfer.files?.[0]) {
+
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
       const selected = e.dataTransfer.files[0];
       setFile(selected);
       setPreview(URL.createObjectURL(selected));
-      e.dataTransfer.clearData();
+
+      // sincroniza o arquivo arrastado com o input real
+      const input = document.getElementById('fileInput') as HTMLInputElement;
+      const dataTransfer = new DataTransfer();
+      dataTransfer.items.add(selected);
+      input.files = dataTransfer.files;
     }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files?.[0]) {
+    if (e.target.files && e.target.files.length > 0) {
       const selected = e.target.files[0];
       setFile(selected);
       setPreview(URL.createObjectURL(selected));
@@ -74,6 +78,10 @@ export default function Form({
   const removeFile = () => {
     setFile(null);
     setPreview(null);
+
+    // limpa o input manualmente
+    const input = document.getElementById('fileInput') as HTMLInputElement;
+    if (input) input.value = '';
   };
 
   return (
@@ -87,6 +95,7 @@ export default function Form({
             name="name"
             value={name}
             onChange={(e) => setName(e.target.value)}
+            placeholder="Nome"
             className="outline-none border-3 focus:border-black peer block w-full rounded-md border-gray-200 py-2 pl-2 text-sm"
           />
           <input
@@ -94,25 +103,29 @@ export default function Form({
             name="price"
             value={price}
             onChange={(e) => setPrice(Number(e.target.value))}
+            placeholder="Preço"
             className="outline-none border-3 focus:border-black peer block w-full rounded-md border-gray-200 py-2 pl-2 text-sm"
           />
         </div>
 
+        {/* campo de imagem */}
         <div className="flex flex-col items-center my-4">
           <label
             htmlFor="fileInput"
             className={`flex flex-col items-center justify-center w-64 h-40 border-2 border-dashed rounded-xl cursor-pointer transition overflow-hidden
-              ${isDragging ? 'border-blue-500 bg-blue-50' : 'border-gray-300 bg-gray-50 hover:bg-blue-50 hover:border-blue-400'}
+              ${isDragging
+                ? 'border-blue-500 bg-blue-50'
+                : 'border-gray-300 bg-gray-50 hover:bg-blue-50 hover:border-blue-400'}
             `}
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
           >
             {preview ? (
-              <img 
-                src={preview} 
-                alt="Preview" 
-                className="object-cover w-full h-full" 
+              <img
+                src={preview}
+                alt="Preview"
+                className="object-cover w-full h-full"
               />
             ) : (
               <>
@@ -141,14 +154,15 @@ export default function Form({
             name="image"
             type="file"
             accept="image/*"
+            multiple={false}
             className="hidden"
             onChange={handleChange}
           />
 
           {file && (
             <button
-              onClick={removeFile}
               type="button"
+              onClick={removeFile}
               className="mt-2 px-3 py-1 bg-red-500 text-white text-sm rounded hover:bg-red-600"
             >
               Remover imagem

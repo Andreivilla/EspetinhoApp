@@ -23,21 +23,22 @@ export default function Form() {
     setIsDragging(false);
   };
 
-  const handleDrop = (e: React.DragEvent<HTMLLabelElement>) => {
-    e.preventDefault();
-    setIsDragging(false);
+const handleDrop = (e: React.DragEvent<HTMLLabelElement>) => {
+  e.preventDefault();
+  setIsDragging(false);
 
-    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-      const selected = e.dataTransfer.files[0];
-      setFile(selected);
-      setPreview(URL.createObjectURL(selected));
-      try{
-        e.dataTransfer.clearData();
-      }catch(err){
-        console.warn('Erro ao limpar o dataTransfer:', err)
-      }
-    }
-  };
+  if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+    const selected = e.dataTransfer.files[0];
+    setFile(selected);
+    setPreview(URL.createObjectURL(selected));
+    
+    const input = document.getElementById('fileInput') as HTMLInputElement;
+    const dataTransfer = new DataTransfer();
+    dataTransfer.items.add(selected);
+    input.files = dataTransfer.files;
+  }
+};
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {

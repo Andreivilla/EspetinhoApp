@@ -28,7 +28,8 @@ export function initializeDatabase() {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         imagem BLOB,
         valor DECIMAL(20,2),
-        nome TEXT
+        nome TEXT,
+        menu BOOLEAN
       );
 
       CREATE TABLE PEDIDOS (
@@ -55,7 +56,6 @@ export function initializeDatabase() {
 }
 
 export default db;
-
 
 export async function getQuery<T = unknown>(
   sql: string,
