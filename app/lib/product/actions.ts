@@ -128,15 +128,15 @@ export async function updateProduct(
   redirect("/stock-manager/products");
 }
 
-export async function removeMenu(id:string) {
+export async function removeMenu(id:string, redirectPath: string) {
   const sql = 'UPDATE PRODUTOS SET menu = FALSE WHERE id = ?';
   const result = await runMutation(sql, [id]);
   if (!result.success) {
     console.error('Erro ao deletar produto:', result.error);
     return;
   }
-  revalidatePath("/stock-manager/products");
-  redirect("/stock-manager/products");
+  revalidatePath(redirectPath);
+  redirect(redirectPath);
 }
 
 export async function addMenu(id:string) {

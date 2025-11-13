@@ -14,6 +14,10 @@ export function SubmitOrder({
   selectedTable: number | null;
 }>) {
 
+  if (!selectedTable || !quantities || Object.keys(quantities).length === 0) {
+    return null;
+  }
+
   const createOrderSet = createOrder.bind(null, quantities, selectedTable); 
 
   return (

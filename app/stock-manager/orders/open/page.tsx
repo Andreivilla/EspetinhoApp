@@ -10,7 +10,7 @@ export default async function Page({
   const ordersList = await fetchOrdersBySituacao('ABERTO');
 
   return (
-    <div>
+    <main>
       <Breadcrumbs
         breadcrumbs={[
             { 
@@ -21,6 +21,6 @@ export default async function Page({
           ]}
         />
       <OrdersListAdmin orders={ordersList}/>
-    </div>
+    </main>
   )
 }

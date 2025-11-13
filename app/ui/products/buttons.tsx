@@ -74,12 +74,14 @@ export function AdicionarMenu({
   );
 }
 export function RemoverMenu({ 
-  id 
+  id, 
+  redirectPath
 }:Readonly <{ 
   id: string
+  redirectPath: string
 }>){
 
-  const removeMenuWithId = removeMenu.bind(null, id);
+  const removeMenuWithId = removeMenu.bind(null, id, redirectPath);
  
   return (
     <form action={removeMenuWithId}>

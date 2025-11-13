@@ -22,7 +22,7 @@ export default function MenuList({
         key={product.id}
         className="bg-white w-full shadow-md rounded-lg p-4 flex items-center justify-between"
       >
-        {/* Esquerda: imagem + info */}
+       
         <div className="flex items-center gap-4">
           {product.imagem ? (
             <div className="w-20 h-20 overflow-hidden rounded">
@@ -46,8 +46,7 @@ export default function MenuList({
           </div>
         </div>
 
-        {/* Direita: botão */}
-        <RemoverMenu id={String(product.id)} />
+        <RemoverMenu id={String(product.id)} redirectPath='/stock-manager/menu'/>
       </div>
     ))}
   </div>

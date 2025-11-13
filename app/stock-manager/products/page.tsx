@@ -3,6 +3,7 @@ import { CreateProduct } from '@/app/ui/products/buttons';
 import { fetchProductsPages } from '@/app/lib/product/data';
 import ProductGrid from '@/app/ui/products/grid';
 import Pagination from '@/app/ui/products/pagination';
+import Breadcrumbs from '@/app/ui/breadcrumbs';
 
 export default async function Page({
   searchParams,
@@ -17,9 +18,13 @@ export default async function Page({
   const totalPages = await fetchProductsPages(query);
   
   return (
-    <div>
+    <main>
+      <Breadcrumbs
+        breadcrumbs={[
+          { label: 'Produtos', href: '/stock-manager/products', active: true},
+        ]}
+      />
       <div className='w-full'>
-        <h1>Produtos</h1>
         <div className='md:h-10 h-22 flex flex-col md:flex-row gap-2'>
             <div className='flex-1 md:flex-3'>
               <Search placeholder='Digite o nome do produto.' />
@@ -35,6 +40,6 @@ export default async function Page({
       <div className="mt-5 flex w-full justify-center">
         <Pagination totalPages={totalPages}/>
       </div>
-    </div>
+    </main>
   )
 }

@@ -18,6 +18,15 @@ export default function CheckOrder({
     useEffect(() => {
       setCacheBust(`?cacheBust=${Date.now()}`);
     }, []);
+
+
+  function totalPriece() {
+    let total = 0;
+    for (const key in productSelected) {
+      total += productSelected[key].valor * productSelected[key].quantitie;
+    }
+    return total;
+  }
   return (
     <>
       <button onClick={() => setIsOpen(true)}
@@ -31,6 +40,10 @@ export default function CheckOrder({
       {isOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded shadow-lg w-full max-w-md relative">
+            <div className="flex justify-between">
+              <span>Mesa: {selectedTable}</span>
+              <span>Total: R$ {totalPriece()}</span>
+            </div>
             <button
               onClick={() => setIsOpen(false)}
               className="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
@@ -38,46 +51,65 @@ export default function CheckOrder({
               ✕
             </button>
 
-            <div className="flex flex-col gap-2 justify-center">
-              {productSelected?.map((product) => (
-              <div key={product.id} className="bg-white w-full shadow-md rounded-lg p-4 flex flex-row items-center justify-between">
-                <div className="flex gap-2 justify-center">
-                  {product.imagem ? (
-                    <div className="w-20 h-20 overflow-hidden rounded">
-                      <Image
-                        src={`${product.imagem}${cacheBust}`}
-                        alt={product.nome ?? "produto"}
-                        width={80}
-                        height={80}
-                        className="object-cover"
-                        style={{ objectFit: 'cover' }}
-                      />
-                    </div>
-                  ) : (
-                    <div className="flex items-center justify-center w-20 h-20 bg-gray-200 text-gray-500">
-                      Sem imagem
-                    </div>
+            <div className="flex flex-col gap-2 justify-center ">
+              {(!productSelected || productSelected.length === 0 || !selectedTable) ? (
+                <div className=" flex flex-col justify-center items-center">
+                  {(!productSelected || productSelected.length === 0) && (
+                    <>
+                    <span className="text-red-600 text-xl text-bold">Nenhum produto selecionado</span><br />
+                    </>
                   )}
-
-                  <div className="flex flex-col justify-center">
-                    <h3 className="text-lg font-semibold text-gray-800">{product.nome}</h3>
-                    <p className="text-gray-500 font-bold">R$ {product.valor.toFixed(2)}</p>
-                  </div>
+                  {!selectedTable && (
+                    <span className="text-red-600 text-xl text-bold">Selecione uma mesa</span>
+                  )}
                 </div>
+              ) : (
+                productSelected.map((product) => (
+                  <div key={product.id} className="bg-white w-full shadow-md rounded-lg p-4 flex flex-row items-center justify-between">
+                    <div className="flex gap-2 justify-center">
+                      {product.imagem ? (
+                        <div className="w-20 h-20 overflow-hidden rounded">
+                          <Image
+                            src={`${product.imagem}${cacheBust}`}
+                            alt={product.nome ?? "produto"}
+                            width={80}
+                            height={80}
+                            className="object-cover"
+                            style={{ objectFit: 'cover' }}
+                          />
+                        </div>
+                      ) : (
+                        <div className="flex items-center justify-center w-20 h-20 bg-gray-200 text-gray-500">
+                          Sem imagem
+                        </div>
+                      )}
 
-                <h1>{product.quantitie}</h1>
-              </div>
-            ))}
-          </div>
+                      <div className="flex flex-col justify-center">
+                        <h3 className="text-lg font-semibold text-gray-800">{product.nome}</h3>
+                        <p className="text-gray-500 font-bold">R$ {product.valor.toFixed(2)}</p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex flex-col">
+                      <span>{product.quantitie}</span>
+                      <span className="text-gray-500 font-bold">R${product.quantitie*product.valor}</span>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+
           
             <button
               onClick={() => setIsOpen(false)}
               className="rounded-md p-2 bg-gray-200 text-black 
-              flex align-center justify-center w-full mb-2"
+              flex align-center justify-center w-full mb-2 mt-4"
             >
               Cancelar
             </button>
-            <SubmitOrder quantities={quantities} selectedTable={selectedTable}/>
+              {productSelected && productSelected.length > 0 && selectedTable !== null && selectedTable > 0 ? (
+                <SubmitOrder quantities={quantities} selectedTable={selectedTable} />
+              ) : null}
           </div>
         </div>        
       )}

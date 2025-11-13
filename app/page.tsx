@@ -17,7 +17,7 @@ export default function Home() {
         </h2>
       </Link>
       <Link
-          href={`/stock-manager/products/`}
+          href={`/stock-manager/`}
           className="bg-white shadow-md rounded-lg p-6 flex flex-col items-center justify-between w-64 h-64">
           <Cog6ToothIcon className="w-40 h-40"/>      
         <h2 className="mt-auto text-center text-lg font-semibold text-black">
