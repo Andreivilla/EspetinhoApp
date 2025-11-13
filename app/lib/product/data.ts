@@ -24,8 +24,67 @@ async function isImageAvailable(id: number): Promise<string | null> {
 }
 export async function fetchFilteredProducts(query: string, currentPage: number): Promise<Produto[]> {
   const offset = (currentPage - 1) * ITEMS_PER_PAGE;
-  const sql = `SELECT id, nome, valor FROM PRODUTOS
+  const sql = `SELECT id, nome, menu, valor FROM PRODUTOS
     WHERE LOWER(nome) LIKE ?
+    ORDER BY nome ASC
+    LIMIT ? OFFSET ?`;
+
+  const params = [`%${query.toLowerCase()}%`, ITEMS_PER_PAGE, offset];
+
+  const { success, data, error } = await getAll<Produto>(sql, params);
+
+  if (!success || !data) {
+    console.error('Erro ao buscar produtos:', error);
+    return [];
+  }
+
+  const produtosComImagem = await Promise.all(
+    data.map(async (produto) => {
+      const imagem = await isImageAvailable(produto.id);
+      return {
+        ...produto,
+        imagem,
+      };
+    })
+  );
+
+  return produtosComImagem;
+}
+
+export async function fetchFilteredProductsMenuNoPages(query: string): Promise<Produto[]> {
+  
+  const sql = `
+  SELECT id, nome, valor FROM PRODUTOS
+  WHERE menu = TRUE 
+    AND LOWER(nome) LIKE ?`;
+
+  //const params = [`%${query.toLowerCase()}%`, ITEMS_PER_PAGE];
+
+  const { success, data, error } = await getAll<Produto>(sql, [`%${query.toLowerCase()}%`]);
+
+  if (!success || !data) {
+    console.error('Erro ao buscar produtos:', error);
+    return [];
+  }
+
+  const produtosComImagem = await Promise.all(
+    data.map(async (produto) => {
+      const imagem = await isImageAvailable(produto.id);
+      return {
+        ...produto,
+        imagem,
+      };
+    })
+  );
+
+  return produtosComImagem;
+}
+
+export async function fetchFilteredProductsMenu(query: string, currentPage: number): Promise<Produto[]> {
+  const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+  const sql = `SELECT id, nome, valor FROM PRODUTOS
+    WHERE menu = TRUE 
+      AND LOWER(nome) LIKE ?
     ORDER BY nome ASC
     LIMIT ? OFFSET ?`;
 

@@ -2,6 +2,7 @@ export type Produto = {
   id: number;
   nome: string;
   valor: number;
+  menu: boolean;
   imagem?: string | null;
 };
 export type Mesa = {

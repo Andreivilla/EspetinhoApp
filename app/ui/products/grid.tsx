@@ -1,5 +1,5 @@
 import { fetchFilteredProducts } from "@/app/lib/product/data";
-import { UpdateProduct } from "./buttons";
+import { UpdateProduct, AdicionarMenu, RemoverMenu } from "./buttons";
 import DeleteModal from "./deleteModal";
 import Image from "next/image";
 
@@ -19,7 +19,7 @@ export default async function ProductGrid({
         return (
           <div
             key={product.id}
-            className="rounded-xl h-100 w-70 overflow-hidden shadow-lg bg-white border border-gray-200 flex flex-col"
+            className="rounded-xl h-120 w-70 overflow-hidden shadow-lg bg-white border border-gray-200 flex flex-col"
           > 
             <div className="h-1/2">
               {product.imagem ? (
@@ -41,7 +41,7 @@ export default async function ProductGrid({
             <div className="p-4 h-1/2 flex flex-col justify-between">
               <div className="">
                 <div>
-                  <h2 className="text-xl font-semibold text-gray-800">{product.nome}</h2>
+                  <h2 className="truncate text-xl font-semibold text-gray-800" title={product.nome ?? ''}>{product.nome}</h2>
                 </div>
                 <span className="text-lg font-bold text-gray-500">R$: {Number(product.valor).toFixed(2)}</span>
               </div>
@@ -49,6 +49,12 @@ export default async function ProductGrid({
               <div className="flex flex-col gap-2 mt-auto">
                 <DeleteModal id={String(product.id)} /> 
                 <UpdateProduct id={String(product.id)} />
+                {product.menu ? (
+                  <RemoverMenu id={String(product.id)} />
+                ) : (
+                  <AdicionarMenu id={String(product.id)} />
+                )}
+
               </div>
             </div>
           </div>

@@ -66,7 +66,6 @@ export const createProduct = async (
   redirect("/stock-manager/products");
 };
 
-
 export async function deleteProduct(id: string) {
   const sql = 'DELETE FROM PRODUTOS WHERE id = ?';
   const result = await runMutation(sql, [id]);
@@ -125,6 +124,28 @@ export async function updateProduct(
     };
   }
 
+  revalidatePath("/stock-manager/products");
+  redirect("/stock-manager/products");
+}
+
+export async function removeMenu(id:string) {
+  const sql = 'UPDATE PRODUTOS SET menu = FALSE WHERE id = ?';
+  const result = await runMutation(sql, [id]);
+  if (!result.success) {
+    console.error('Erro ao deletar produto:', result.error);
+    return;
+  }
+  revalidatePath("/stock-manager/products");
+  redirect("/stock-manager/products");
+}
+
+export async function addMenu(id:string) {
+  const sql = 'UPDATE PRODUTOS SET menu = TRUE WHERE id = ?';
+  const result = await runMutation(sql, [id]);
+  if (!result.success) {
+    console.error('Erro ao deletar produto:', result.error);
+    return;
+  }
   revalidatePath("/stock-manager/products");
   redirect("/stock-manager/products");
 }

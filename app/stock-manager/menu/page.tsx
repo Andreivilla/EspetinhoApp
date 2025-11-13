@@ -1,8 +1,7 @@
 import Search from '@/app/ui/search';
-import { fetchProductsPages, fetchFilteredProductsMenu, fetchFilteredProductsMenuNoPages } from '@/app/lib/product/data';
+import { fetchProductsPages, fetchFilteredProductsMenu } from '@/app/lib/product/data';
 import Pagination from '@/app/ui/products/pagination';
-import OrderList from '@/app/ui/orders/orderList';
-import { fetchNTables } from '@/app/lib/tables/data';
+import MenuList from '@/app/ui/menu/menuList';
 
 export default async function Page({ 
   searchParams 
@@ -17,8 +16,7 @@ export default async function Page({
   const currentPage = Number(params?.page) || 1;
 
   const totalPages = await fetchProductsPages(query);
-  const products = await fetchFilteredProductsMenuNoPages(query);
-  const nTables = await fetchNTables() ?? 0;
+  const products = await fetchFilteredProductsMenu(query, currentPage);
 
   return (
     <div>
@@ -29,7 +27,11 @@ export default async function Page({
           </div>
         </div>
       </div>
-      <OrderList products={products} nTables={nTables}/>
+      <MenuList products={products}/>
+
+      <div className="mt-5 flex w-full justify-center">
+        <Pagination totalPages={totalPages} />
+      </div>
     </div>
   );
 }

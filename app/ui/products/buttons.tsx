@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { deleteProduct } from '@/app/lib/product/actions';
+import { deleteProduct, addMenu, removeMenu } from '@/app/lib/product/actions';
 
 export function CreateProduct() {
   return (
@@ -46,6 +46,49 @@ export function DeleteProduct({
         hover:bg-gray-800 w-full"
       >
         <span>Deletar Produto</span>
+        
+      </button>
+    </form>
+  );
+}
+
+export function AdicionarMenu({ 
+  id 
+}:Readonly <{ 
+  id: string
+}>){
+
+  const addMenuWithId = addMenu.bind(null, id);
+ 
+  return (
+    <form action={addMenuWithId}>
+      <button type="submit" 
+        className="rounded-md border p-2 h-10 bg-black
+        text-white flex align-center justify-center
+        hover:bg-gray-800 w-full"
+      >
+        <span>Adicionar ao Menu</span>
+        
+      </button>
+    </form>
+  );
+}
+export function RemoverMenu({ 
+  id 
+}:Readonly <{ 
+  id: string
+}>){
+
+  const removeMenuWithId = removeMenu.bind(null, id);
+ 
+  return (
+    <form action={removeMenuWithId}>
+      <button type="submit" 
+        className="rounded-md border p-2 h-10 bg-black
+        text-white flex align-center justify-center
+        hover:bg-gray-800 w-full"
+      >
+        <span>Remover do menu</span>
         
       </button>
     </form>
