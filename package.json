@@ -11,6 +11,7 @@
     "start": "next start",
     "lint": "eslint",
     "rebuild": "electron-rebuild",
+    "build:next": "next build", 
     "build:win": "next build && npm run rebuild && electron-builder --win --x64",
     "postinstall": "npx electron-rebuild -f -w sqlite3 --version 38.2.1"
   },

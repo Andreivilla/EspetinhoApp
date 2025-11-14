@@ -1,6 +1,5 @@
 import Search from '@/app/ui/search';
-import { fetchProductsPages, fetchFilteredProductsMenu, fetchFilteredProductsMenuNoPages } from '@/app/lib/product/data';
-import Pagination from '@/app/ui/products/pagination';
+import { fetchFilteredProductsMenuNoPages } from '@/app/lib/product/data';
 import OrderList from '@/app/ui/orders/orderList';
 import { fetchNTables } from '@/app/lib/tables/data';
 
@@ -14,9 +13,7 @@ export default async function Page({
 }>) {
   const params = await searchParams;
   const query = params?.query || '';
-  const currentPage = Number(params?.page) || 1;
 
-  const totalPages = await fetchProductsPages(query);
   const products = await fetchFilteredProductsMenuNoPages(query);
   const nTables = await fetchNTables() ?? 0;
 

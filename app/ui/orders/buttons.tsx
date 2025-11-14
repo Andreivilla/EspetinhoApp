@@ -1,11 +1,5 @@
 import { createOrder, CancelarOrder, FinalizarOrder } from "@/app/lib/orders/actions";
 
-type ButtonProps = {
-  quantities: Record<number, number>;
-  selectedTable: number | null;
-};
-
-
 export function SubmitOrder({ 
   quantities, 
   selectedTable 

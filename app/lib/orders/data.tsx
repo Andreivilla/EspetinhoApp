@@ -1,30 +1,25 @@
-import { Produto } from '../definitions';
-
-import { getQuery, getAll } from '../db';
+import { getAll } from '../db';
 import { Pedido, PedidoItem } from '../definitions';
 import { fetchProductById } from '../product/data';
-import { success } from 'zod';
+
+type ItemData = Omit<PedidoItem, 'produto'>
 
 const ITEMS_PER_PAGE = 6;
 
 export async function fetchOrderItens(id: number) {
   try {
     const sql = 'SELECT * FROM PEDIDOITEM WHERE id_pedido = ?';
-    const result = await getAll(sql, [id]);
-    if (result.data === undefined) {
-      return []
-    }
+
+    const result: { success: boolean; data?: ItemData[]; error?: string } = await getAll(sql, [id]);
+
     const itens: PedidoItem[] = await Promise.all(
-      result.data.map(async (item: any) => ({
-        id: item.id,
-        id_produto: item.id_produto,
-        id_pedido: item.id_pedido,
-        quantidade: item.quantidade,
-        valor: item.valor,
-        produto: await fetchProductById(item.id)
-        })
-      )
+      (result.data ?? []).map(async (item) => ({
+        ...item, 
+        produto: await fetchProductById(String(item.id_pedido))
+      }))
     );
+
+    //produto: await fetchProductById(item.id)
 
     return itens;
   } catch (error) {
