@@ -26,13 +26,13 @@ const createWindow = () => {
       preload: path.join(__dirname, "preload.js")
     }
   });
-    // 🔐 Intercepta navegações internas para evitar 404
+    // Intercepta navegações internas para evitar 404
   win.webContents.on('will-navigate', (event, url) => {
     event.preventDefault();
     win.loadURL(url);
   });
 
-  // 🔐 Bloqueia abertura de novas janelas externas
+  // Bloqueia abertura de novas janelas externas
   win.webContents.setWindowOpenHandler(() => {
     return { action: 'deny' };
   });

@@ -11,9 +11,17 @@
     "start": "next start",
     "lint": "eslint",
     "rebuild": "electron-rebuild",
-    "build:next": "next build", 
+
+    "build:next": "next build",
+    "start:electron": "electron .",
+    "pack": "npm run build:next && electron-packager . EspetinhoApp --platform=win32 --arch=x64 --out=dist --overwrite",
+    
     "build:win": "next build && npm run rebuild && electron-builder --win --x64",
     "postinstall": "npx electron-rebuild -f -w sqlite3 --version 38.2.1"
+
+    
+
+
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
