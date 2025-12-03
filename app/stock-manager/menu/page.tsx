@@ -4,6 +4,8 @@ import Pagination from '@/app/ui/products/pagination';
 import MenuList from '@/app/ui/menu/menuList';
 import Breadcrumbs from '@/app/ui/breadcrumbs';
 
+export const dynamic = "force-dynamic";
+
 export default async function Page({ 
   searchParams 
 }: Readonly<{

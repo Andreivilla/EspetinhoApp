@@ -4,11 +4,12 @@ import { fetchOrdersBySituacao } from "../lib/orders/data";
 import OrderOpenList from "../ui/orders/ordersOpen";
 import Breadcrumbs from "../ui/breadcrumbs";
 
+export const dynamic = "force-dynamic";
+
 export default async function Page() {
   const nTables = await fetchNTables() ?? 0;
 
   const ordersList = await fetchOrdersBySituacao('ABERTO');
-
   return (
     
     <main className="flex flex-col gap-2">

@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { fetchProductImageById } from "@/app/lib/product/data";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(req: Request) {
   const url = new URL(req.url);
   const segments = url.pathname.split("/"); 
