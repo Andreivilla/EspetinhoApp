@@ -5,6 +5,8 @@ import ProductGrid from '@/app/ui/products/grid';
 import Pagination from '@/app/ui/products/pagination';
 import Breadcrumbs from '@/app/ui/breadcrumbs';
 
+export const dynamic = "force-dynamic";
+
 export default async function Page({
   searchParams,
 }: Readonly< {

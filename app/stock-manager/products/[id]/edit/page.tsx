@@ -3,6 +3,7 @@ import Form from '@/app/ui/products/edit-form';
 import { fetchProductById } from '@/app/lib/product/data';
 import { notFound } from 'next/navigation'; 
 
+export const dynamic = "force-dynamic";
 
 export default async function Page({
   params,
