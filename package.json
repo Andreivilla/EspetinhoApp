@@ -8,13 +8,20 @@
   "type": "module",
   "scripts": {
     "dev": "concurrently -n \"NEXT,ELECTRON\" -c \"yellow,blue\" --kill-others \"next dev\" \"wait-on http://localhost:3000 && electron .\"",
-    "start": "next start",
+
+    "cpPublic:win": "xcopy public .next\\standalone\\EspetinhoApp\\public /E /I /Y",
+    "cpDb:win": "mkdir .\\.next\\standalone\\EspetinhoApp\\data >nul 2>&1 & copy /Y data\\db.db .\\.next\\standalone\\EspetinhoApp\\data\\db.db",
+    "cpStatic:win": "xcopy .next\\static .next\\standalone\\EspetinhoApp\\.next\\static /E /I /Y",
+    "cp:all:win": "npm run cpPublic:win && npm run cpStatic:win && npm run cpDb:win",
+
+    "next:start": "node .next/standalone/EspetinhoApp/server.js",
+    "next:build": "next build ",
     "lint": "eslint",
     "rebuild": "electron-rebuild",
+    "comando:antigo": "next start",
 
-    "build:next": "next build",
     "start:electron": "electron .",
-    "pack": "npm run build:next && electron-packager . EspetinhoApp --platform=win32 --arch=x64 --out=dist --overwrite",
+    "pack": "npm run next:build && electron-packager . EspetinhoApp --platform=win32 --arch=x64 --out=dist --overwrite",
     
     "build:win": "next build && npm run rebuild && electron-builder --win --x64",
     "postinstall": "npx electron-rebuild -f -w sqlite3 --version 38.2.1"
