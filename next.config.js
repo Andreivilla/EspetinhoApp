@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-/*  images: {
+  images: {
     unoptimized: true,
   },
   experimental: {
@@ -8,7 +8,7 @@ const nextConfig = {
       bodySizeLimit: '50mb', 
     },
   },
-  */
+  
   output: 'standalone',
 };
 
